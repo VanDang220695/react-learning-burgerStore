@@ -8,8 +8,10 @@ import classes from './index.css';
 const toolbar = () => (
   <header className={classes.Toolbar}>
     <div>MENU</div>
-    <Logo />
-    <nav>
+    <div className={classes.Logo}>
+      <Logo />
+    </div>
+    <nav className={classes.DesktopOnly}>
       <Navigation />
     </nav>
   </header>
