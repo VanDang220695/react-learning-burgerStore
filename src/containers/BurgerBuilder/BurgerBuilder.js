@@ -28,7 +28,7 @@ class BurgerBuilder extends Component {
     error: false,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     axios
       .get('https://react-my-burger-85174.firebaseio.com/ingredients.json')
       .then(res => {
@@ -88,29 +88,16 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    this.setState({ loading: true });
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Van Dang',
-        address: {
-          street: 'Ho Chi Minh',
-          zipCode: '700000',
-          country: 'Viet Nam',
-        },
-        email: 'test@test@gmail.com',
-      },
-      deliveryMethod: 'fastest',
-    };
-    axios
-      .post('/orders.json', order)
-      .then(res => {
-        this.setState({ loading: false, puchasing: false });
-      })
-      .catch(() => {
-        this.setState({ loading: false, puchasing: false });
-      });
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+    }
+    queryParams.push('price=' + this.state.totalPrice);
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString,
+    });
   };
 
   render() {
