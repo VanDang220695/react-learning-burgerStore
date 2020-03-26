@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import Logo from '../../Logo';
-import NavigationItems from '../../Navigation/NavigationItems';
-import Backdrop from '../../UI/BackDrop';
-import Aux from '../../../hoc/Aux';
+import Logo from "../../Logo";
+import NavigationItems from "../../Navigation/NavigationItems";
+import Backdrop from "../../UI/BackDrop";
+import AuxContainer from "../../../hoc/AuxContainer";
 
-import classes from './styles.css';
+import classes from "./styles.css";
 
 const sideDrawer = props => {
   let attachedClasses = [classes.SideDrawer, classes.Close];
@@ -13,9 +13,9 @@ const sideDrawer = props => {
     attachedClasses = [classes.SideDrawer, classes.Open];
   }
   return (
-    <Aux>
+    <AuxContainer>
       <Backdrop show={props.open} clicked={props.closed} />
-      <div className={attachedClasses.join(' ')}>
+      <div className={attachedClasses.join(" ")}>
         <div className={classes.Logo}>
           <Logo />
         </div>
@@ -23,7 +23,7 @@ const sideDrawer = props => {
           <NavigationItems />
         </nav>
       </div>
-    </Aux>
+    </AuxContainer>
   );
 };
 

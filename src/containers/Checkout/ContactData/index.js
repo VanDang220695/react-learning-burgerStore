@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../../../components/UI/Button';
 import Spinner from '../../../components/UI/Spinner';
@@ -17,6 +18,11 @@ class ContactData extends React.Component {
           placeholder: 'Your Name',
         },
         value: '',
+        valdation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       street: {
         elementType: 'input',
@@ -25,6 +31,11 @@ class ContactData extends React.Component {
           placeholder: 'Street',
         },
         value: '',
+        valdation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       zipCode: {
         elementType: 'input',
@@ -33,6 +44,13 @@ class ContactData extends React.Component {
           placeholder: 'ZIP Code',
         },
         value: '',
+        valdation: {
+          required: true,
+          minLength: 5,
+          maxLength: 10,
+        },
+        valid: false,
+        touched: false,
       },
       country: {
         elementType: 'input',
@@ -41,6 +59,11 @@ class ContactData extends React.Component {
           placeholder: 'Country',
         },
         value: '',
+        valdation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       email: {
         elementType: 'input',
@@ -49,6 +72,11 @@ class ContactData extends React.Component {
           placeholder: 'Email',
         },
         value: '',
+        valdation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       deliveryMethod: {
         elementType: 'select',
@@ -58,28 +86,26 @@ class ContactData extends React.Component {
             { value: 'cheapest', displayValue: 'Cheapest' },
           ],
         },
-        value: '',
+        valdation: {},
+        value: 'cheapest',
+        valid: true,
       },
     },
+    formIsValid: false,
     loading: false,
   };
 
   orderHandler = e => {
     e.preventDefault();
     this.setState({ loading: true });
+    let formData = {};
+    for (let formElement in this.state.orderForm) {
+      formData[formElement] = this.state.orderForm[formElement].value;
+    }
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       price: this.props.price,
-      customer: {
-        name: 'Van Dang',
-        address: {
-          street: 'Ho Chi Minh',
-          zipCode: '700000',
-          country: 'Viet Nam',
-        },
-        email: 'test@test@gmail.com',
-      },
-      deliveryMethod: 'fastest',
+      orderData: formData,
     };
     axios
       .post('/orders.json', order)
@@ -92,6 +118,45 @@ class ContactData extends React.Component {
       });
   };
 
+  checkValidity = (value, rules) => {
+    let isValid = true;
+    if (!rules) return isValid;
+    if (rules.required) {
+      isValid = value.trim() !== '' && isValid;
+    }
+    if (rules.minLength) {
+      isValid = value.trim().length >= rules.minLength && isValid;
+    }
+    if (rules.maxLength) {
+      isValid = value.trim().length <= rules.maxLength && isValid;
+    }
+    return isValid;
+  };
+
+  inputChangeHanlder = (e, inputIdentifier) => {
+    const updateOrderForm = {
+      ...this.state.orderForm,
+    };
+    const updateFormElement = {
+      ...updateOrderForm[inputIdentifier],
+    };
+    updateFormElement.value = e.target.value;
+    updateFormElement.valid = this.checkValidity(
+      updateFormElement.value,
+      updateFormElement.valdation,
+    );
+    updateFormElement.touched = true;
+
+    updateOrderForm[inputIdentifier] = updateFormElement;
+
+    let formIsValid = true;
+    for (let inputElement in updateOrderForm) {
+      formIsValid = updateOrderForm[inputElement].valid && formIsValid;
+    }
+
+    this.setState({ orderForm: updateOrderForm, formIsValid });
+  };
+
   render() {
     const formElementArray = [];
     for (let key in this.state.orderForm) {
@@ -101,16 +166,21 @@ class ContactData extends React.Component {
       });
     }
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formElementArray.map(formElement => (
           <Input
             key={formElement.id}
             elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            touched={formElement.config.touched}
+            valueType={formElement.id}
+            changed={event => this.inputChangeHanlder(event, formElement.id)}
+            shouldValidate={formElement.config.valdation}
           />
         ))}
-        <Button btnType='Success' clicked={this.orderHandler}>
+        <Button btnType='Success' disabled={!this.state.formIsValid}>
           ORDER
         </Button>
       </form>
@@ -127,4 +197,11 @@ class ContactData extends React.Component {
   }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+  return {
+    ings: state.ingredients,
+    price: state.totalPrice,
+  };
+};
+
+export default connect(mapStateToProps, null)(ContactData);

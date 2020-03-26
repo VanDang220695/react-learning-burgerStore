@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Modal from '../../components/UI/Modal';
-import Aux from '../Aux';
+import Modal from "../../components/UI/Modal";
+import AuxContainer from "../AuxContainer";
 
 const withErrorHandler = (WrappedComponent, axios) => {
   return class extends Component {
     state = {
-      error: null,
+      error: null
     };
     componentWillMount() {
       this.reqInterceptor = axios.interceptors.request.use(req => {
@@ -17,7 +17,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
         res => res,
         error => {
           this.setState({ error });
-        },
+        }
       );
     }
 
@@ -32,12 +32,15 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
     render() {
       return (
-        <Aux>
-          <Modal show={this.state.error} modalClosed={this.errorConfirmedHanlder}>
+        <AuxContainer>
+          <Modal
+            show={this.state.error}
+            modalClosed={this.errorConfirmedHanlder}
+          >
             {this.state.error && this.state.error.message}
           </Modal>
           <WrappedComponent {...this.props} />
-        </Aux>
+        </AuxContainer>
       );
     }
   };
