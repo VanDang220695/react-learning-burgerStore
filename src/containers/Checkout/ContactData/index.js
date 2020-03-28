@@ -5,6 +5,8 @@ import Button from '../../../components/UI/Button';
 import Spinner from '../../../components/UI/Spinner';
 import Input from '../../../components/UI/Input';
 import axios from '../../../axios-orders';
+import withErrorHandler from '../../../hoc/withErrorHandler';
+import * as actionTypes from '../../../store/actions';
 
 import classes from './styles.css';
 
@@ -92,12 +94,10 @@ class ContactData extends React.Component {
       },
     },
     formIsValid: false,
-    loading: false,
   };
 
   orderHandler = e => {
     e.preventDefault();
-    this.setState({ loading: true });
     let formData = {};
     for (let formElement in this.state.orderForm) {
       formData[formElement] = this.state.orderForm[formElement].value;
@@ -116,6 +116,7 @@ class ContactData extends React.Component {
       .catch(() => {
         this.setState({ loading: false });
       });
+    this.props.onOrderBurger(order);
   };
 
   checkValidity = (value, rules) => {
@@ -185,7 +186,7 @@ class ContactData extends React.Component {
         </Button>
       </form>
     );
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />;
     }
     return (
@@ -201,7 +202,12 @@ const mapStateToProps = state => {
   return {
     ings: state.ingredients,
     price: state.totalPrice,
+    loading: state.loading,
   };
 };
 
-export default connect(mapStateToProps, null)(ContactData);
+const mapDispatchToProps = dispatch => ({
+  onOrderBurger: orderData => dispatch(actionTypes.purchaseBurger(orderData)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
