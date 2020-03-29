@@ -50,6 +50,7 @@ class ContactData extends React.Component {
           required: true,
           minLength: 5,
           maxLength: 10,
+          isNumeric: true,
         },
         valid: false,
         touched: false,
@@ -76,6 +77,7 @@ class ContactData extends React.Component {
         value: '',
         valdation: {
           required: true,
+          isEmail: true,
         },
         valid: false,
         touched: false,
@@ -107,7 +109,7 @@ class ContactData extends React.Component {
       price: this.props.price,
       orderData: formData,
     };
-    this.props.onOrderBurger(order);
+    this.props.onOrderBurger(order, this.props.token);
   };
 
   checkValidity = (value, rules) => {
@@ -121,6 +123,15 @@ class ContactData extends React.Component {
     }
     if (rules.maxLength) {
       isValid = value.trim().length <= rules.maxLength && isValid;
+    }
+    if (rules.isEmail) {
+      // eslint-disable-next-line no-useless-escape
+      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      isValid = pattern.test(value) && isValid;
+    }
+    if (rules.isNumeric) {
+      const pattern = /^\d+$/;
+      isValid = pattern.test(value) && isValid;
     }
     return isValid;
   };
@@ -194,6 +205,7 @@ const mapStateToProps = state => {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
+    token: state.auth.token,
   };
 };
 
