@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import Button from '../../../components/UI/Button';
 import Spinner from '../../../components/UI/Spinner';
 import Input from '../../../components/UI/Input';
+
 import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actionTypes from '../../../store/actions';
+import { updateObject } from '../../../shared/utility';
 
 import classes from './styles.css';
 
@@ -137,20 +139,17 @@ class ContactData extends React.Component {
   };
 
   inputChangeHanlder = (e, inputIdentifier) => {
-    const updateOrderForm = {
-      ...this.state.orderForm,
-    };
-    const updateFormElement = {
-      ...updateOrderForm[inputIdentifier],
-    };
-    updateFormElement.value = e.target.value;
-    updateFormElement.valid = this.checkValidity(
-      updateFormElement.value,
-      updateFormElement.valdation,
-    );
-    updateFormElement.touched = true;
+    const { value } = e.target;
+    const formIdentifierValue = this.state.orderForm[inputIdentifier];
+    const updateFormElement = updateObject(formIdentifierValue, {
+      value: value,
+      valid: this.checkValidity(value, formIdentifierValue.valdation),
+      touched: true,
+    });
 
-    updateOrderForm[inputIdentifier] = updateFormElement;
+    const updateOrderForm = updateObject(this.state.orderForm, {
+      [inputIdentifier]: updateFormElement,
+    });
 
     let formIsValid = true;
     for (let inputElement in updateOrderForm) {
