@@ -8,7 +8,7 @@ import Input from '../../../components/UI/Input';
 import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actionTypes from '../../../store/actions';
-import { updateObject } from '../../../shared/utility';
+import { updateObject, checkValidity } from '../../../shared/utility';
 
 import classes from './styles.css';
 
@@ -113,37 +113,12 @@ class ContactData extends React.Component {
     };
     this.props.onOrderBurger(order, this.props.token);
   };
-
-  checkValidity = (value, rules) => {
-    let isValid = true;
-    if (!rules) return isValid;
-    if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
-    }
-    if (rules.minLength) {
-      isValid = value.trim().length >= rules.minLength && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.trim().length <= rules.maxLength && isValid;
-    }
-    if (rules.isEmail) {
-      // eslint-disable-next-line no-useless-escape
-      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      isValid = pattern.test(value) && isValid;
-    }
-    if (rules.isNumeric) {
-      const pattern = /^\d+$/;
-      isValid = pattern.test(value) && isValid;
-    }
-    return isValid;
-  };
-
   inputChangeHanlder = (e, inputIdentifier) => {
     const { value } = e.target;
     const formIdentifierValue = this.state.orderForm[inputIdentifier];
     const updateFormElement = updateObject(formIdentifierValue, {
       value: value,
-      valid: this.checkValidity(value, formIdentifierValue.valdation),
+      valid: checkValidity(value, formIdentifierValue.valdation),
       touched: true,
     });
 
