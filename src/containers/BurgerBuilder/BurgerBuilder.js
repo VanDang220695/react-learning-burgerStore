@@ -12,7 +12,7 @@ import Spinner from '../../components/UI/Spinner';
 import * as actions from '../../store/actions';
 import withErrorHandler from '../../hoc/withErrorHandler';
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     puchasing: false,
   };
