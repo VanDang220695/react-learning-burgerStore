@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
 
 export const purchaseBurgerSuccess = (id, orderData) => {
   return {
@@ -23,16 +22,12 @@ export const purchaseBurgerStart = () => {
 };
 
 export const purchaseBurger = (orderData, token) => {
-  return dispatch => {
-    dispatch(purchaseBurgerStart());
-    axios
-      .post(`/orders.json?auth=${token}`, orderData)
-      .then(res => {
-        dispatch(purchaseBurgerSuccess(res.data, orderData));
-      })
-      .catch(error => {
-        dispatch(purchaseBurgerFailed(error));
-      });
+  return {
+    type: actionTypes.PURCHASE_BURGER,
+    payload: {
+      orderData,
+      token,
+    },
   };
 };
 
@@ -62,23 +57,12 @@ export const fetchOrderStart = () => {
   };
 };
 
-export const fetchOrders = token => {
-  return dispatch => {
-    dispatch(fetchOrderStart());
-    axios
-      .get(`/orders.json?auth=${token}`)
-      .then(res => {
-        const dataFetch = [];
-        for (let key in res.data) {
-          dataFetch.push({
-            ...res.data[key],
-            id: key,
-          });
-        }
-        dispatch(fetchOrderSuccess(dataFetch));
-      })
-      .catch(err => {
-        dispatch(fetchOrderfail(err));
-      });
+export const fetchOrders = (token, userId) => {
+  return {
+    type: actionTypes.FETCH_ORDER,
+    payload: {
+      token,
+      userId,
+    },
   };
 };
