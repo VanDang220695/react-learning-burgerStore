@@ -17,7 +17,7 @@ export function* checkAuthTimeout(payload) {
   yield put(actions.logout());
 }
 
-export function* authUser(payload) {
+export function* authUser({ payload }) {
   yield put(actions.authStart());
   const { email, password, isSignUp } = payload;
   const authData = {
@@ -29,8 +29,9 @@ export function* authUser(payload) {
   if (!isSignUp) {
     url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
   }
+  let res;
   try {
-    const res = yield axios.post(url, authData);
+    res = yield axios.post(url, authData);
     const { idToken, localId, expiresIn } = res.data;
     const expirationDate = yield new Date(new Date().getTime() + Number(expiresIn) * 1000);
     yield localStorage.setItem('token', idToken);
@@ -39,7 +40,7 @@ export function* authUser(payload) {
     yield put(actions.authSuccess(idToken, localId));
     yield put(actions.checkAuthTimeout(Number(expiresIn)));
   } catch (error) {
-    yield put(actions.authFailed(error.res.data.error));
+    yield put(actions.authFailed(error.response.data.error));
   }
 }
 

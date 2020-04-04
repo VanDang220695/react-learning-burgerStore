@@ -21,13 +21,10 @@ export const purchaseBurgerStart = () => {
   };
 };
 
-export const purchaseBurger = (orderData, token) => {
+export const purchaseBurger = payload => {
   return {
     type: actionTypes.PURCHASE_BURGER,
-    payload: {
-      orderData,
-      token,
-    },
+    payload,
   };
 };
 
@@ -57,12 +54,9 @@ export const fetchOrderStart = () => {
   };
 };
 
-export const fetchOrders = (token, userId) => {
+export const fetchOrders = payload => {
   return {
     type: actionTypes.FETCH_ORDER,
-    payload: {
-      token,
-      userId,
-    },
+    payload,
   };
 };
