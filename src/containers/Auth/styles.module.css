@@ -1,0 +1,26 @@
+.Auth {
+  margin: 20px auto;
+  width: 80%;
+  box-shadow: 0 2px 3px #ccc;
+  border: 1px solid #eee;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.txt__switchSign {
+  margin-top: 8px;
+  text-align: right;
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+.title__form_auth {
+  text-transform: uppercase;
+  color: blue;
+  text-align: center;
+  font-size: 26px;
+}
+@media (min-width: 600px) {
+  .Auth {
+    width: 500px;
+  }
+}

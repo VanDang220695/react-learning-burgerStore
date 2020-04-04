@@ -1,49 +1,14 @@
 import React, { useState, useEffect } from 'react';
-
+import { Form, Input, Button } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import Input from '../../components/UI/Input';
-import Button from '../../components/UI/Button';
-import Spinner from '../../components/UI/Spinner';
-
 import * as actions from '../../store/actions';
-import { updateObject, checkValidity } from '../../shared/utility';
 
-import classes from './styles.css';
+import classes from './styles.module.css';
 
 const Auth = (props) => {
-  const [controls, setControls] = useState({
-    email: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'email',
-        placeholder: 'Mail Address',
-      },
-      value: '',
-      valdation: {
-        required: true,
-        isEmail: true,
-      },
-      valid: false,
-      touched: false,
-    },
-    password: {
-      elementType: 'input',
-      elementConfig: {
-        type: 'password',
-        placeholder: 'Password',
-      },
-      value: '',
-      valdation: {
-        required: true,
-        minLength: 6,
-        maxLength: 10,
-      },
-      valid: false,
-      touched: false,
-    },
-  });
   const [isSignup, setIsSignup] = useState(true);
 
   const { buildingBurger, authRedirectPath, onSetRedirectPath, onAuth } = props;
@@ -53,52 +18,18 @@ const Auth = (props) => {
     }
   }, [buildingBurger, authRedirectPath, onSetRedirectPath]);
 
-  const inputChangeHanlder = (e, controlName) => {
-    const { value } = e.target;
-    const updateControls = updateObject(controls, {
-      [controlName]: updateObject(controls[controlName], {
-        value,
-        valid: checkValidity(value, controls[controlName].valdation),
-        touched: true,
-      }),
-    });
-    setControls(updateControls);
-  };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    onAuth(controls.email.value, controls.password.value, isSignup);
+  const submitHandler = (formValue) => {
+    const { email, password } = formValue;
+    onAuth(email, password, isSignup);
   };
 
   const switchAuthModeHandler = () => {
     setIsSignup((prevState) => !prevState);
   };
 
-  const formElementArray = [];
-  for (let key in controls) {
-    formElementArray.push({
-      id: key,
-      config: controls[key],
-    });
-  }
-
-  let form = formElementArray.map((formElement) => (
-    <Input
-      key={formElement.id}
-      elementType={formElement.config.elementType}
-      elementConfig={formElement.config.elementConfig}
-      value={formElement.config.value}
-      invalid={!formElement.config.valid}
-      touched={formElement.config.touched}
-      valueType={formElement.id}
-      changed={(event) => inputChangeHanlder(event, formElement.id)}
-      shouldValidate={formElement.config.valdation}
-    />
-  ));
-
-  if (props.loading) {
-    form = <Spinner />;
-  }
+  // if (props.loading) {
+  //   form = <Spinner />;
+  // }
 
   let errorMesssage = null;
 
@@ -119,13 +50,82 @@ const Auth = (props) => {
     <div className={classes.Auth}>
       {authRedirect}
       {errorMesssage}
-      <form onSubmit={submitHandler}>
+      {/* <form onSubmit={submitHandler}>
         {form}
         <Button btnType='Success'>SUBMIT</Button>
       </form>
       <Button btnType='Danger' clicked={switchAuthModeHandler}>
         SWITCH TO {isSignup ? 'SIGNIN' : 'SIGNUP'}
-      </Button>
+      </Button> */}
+      <p className={classes.title__form_auth}>{isSignup ? 'Login' : 'Register'}</p>
+      <Form name='authentication' onFinish={submitHandler}>
+        <Form.Item
+          name='email'
+          rules={[
+            {
+              required: true,
+              message: 'Please input your email!',
+            },
+            {
+              type: 'email',
+              message: 'Your email is invalid',
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className='site-form-item-icon' />}
+            placeholder='Your email'
+          />
+        </Form.Item>
+        <Form.Item
+          name='password'
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+            {
+              min: 6,
+              message: 'Minimum password length six characters',
+            },
+            {
+              max: 10,
+              message: 'Maximum password length ten characters',
+            },
+            () => {
+              return {
+                validator(_, value) {
+                  if (
+                    !value ||
+                    value.length < 6 ||
+                    value.length > 10 ||
+                    /(?=.*[0-9])+(?=.*[A-Z])/g.test(value)
+                  ) {
+                    return Promise.resolve();
+                  } else {
+                    return Promise.reject(
+                      'The password must contain at least one uppercase character and numeric character',
+                    );
+                  }
+                },
+              };
+            },
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className='site-form-item-icon' />}
+            type='password'
+            placeholder='Your password'
+          />
+        </Form.Item>
+        <Button type='primary' block htmlType='submit' style={{ marginTop: '16px' }}>
+          SUBMIT
+        </Button>
+      </Form>
+      <p onClick={switchAuthModeHandler} className={classes.txt__switchSign}>
+        Switch to {isSignup ? 'signin' : 'signup'}
+      </p>
     </div>
   );
 };

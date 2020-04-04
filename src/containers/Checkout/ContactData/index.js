@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Button } from 'antd';
 
-import Button from '../../../components/UI/Button';
 import Spinner from '../../../components/UI/Spinner';
 import Input from '../../../components/UI/Input';
 
@@ -157,7 +157,7 @@ const ContactData = (props) => {
           shouldValidate={formElement.config.valdation}
         />
       ))}
-      <Button btnType='Success' disabled={!formIsValid}>
+      <Button type='primary' disabled={!formIsValid}>
         ORDER
       </Button>
     </form>
