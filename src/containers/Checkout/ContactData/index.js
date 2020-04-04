@@ -11,8 +11,8 @@ import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actionTypes from '../../../store/actions';
 import { updateObject, checkValidity } from '../../../shared/utility';
 
-import classes from './styles.css';
-const contactData = props => {
+import classes from './styles.module.css';
+const ContactData = (props) => {
   const [orderForm, setOrderForm] = useState({
     name: {
       elementType: 'input',
@@ -97,7 +97,7 @@ const contactData = props => {
     },
   });
   const [formIsValid, setFormIsValid] = useState(false);
-  const orderHandler = e => {
+  const orderHandler = (e) => {
     e.preventDefault();
     let formData = {};
     for (let formElement in orderForm) {
@@ -144,7 +144,7 @@ const contactData = props => {
   }
   let form = (
     <form onSubmit={orderHandler}>
-      {formElementArray.map(formElement => (
+      {formElementArray.map((formElement) => (
         <Input
           key={formElement.id}
           elementType={formElement.config.elementType}
@@ -153,7 +153,7 @@ const contactData = props => {
           invalid={!formElement.config.valid}
           touched={formElement.config.touched}
           valueType={formElement.id}
-          changed={event => inputChangeHanlder(event, formElement.id)}
+          changed={(event) => inputChangeHanlder(event, formElement.id)}
           shouldValidate={formElement.config.valdation}
         />
       ))}
@@ -173,7 +173,7 @@ const contactData = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
@@ -183,11 +183,11 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  onOrderBurger: payload => dispatch(actionTypes.purchaseBurger(payload)),
+const mapDispatchToProps = (dispatch) => ({
+  onOrderBurger: (payload) => dispatch(actionTypes.purchaseBurger(payload)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withErrorHandler(withRouter(contactData), axios));
+)(withErrorHandler(withRouter(ContactData), axios));

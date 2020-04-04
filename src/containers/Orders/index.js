@@ -9,7 +9,7 @@ import withErrorHandler from '../../hoc/withErrorHandler';
 
 import * as actions from '../../store/actions';
 
-const orders = props => {
+const Orders = (props) => {
   const { token, userId, onFetchOrders } = props;
   useEffect(() => {
     onFetchOrders({ token, userId });
@@ -18,7 +18,7 @@ const orders = props => {
   if (!props.loading) {
     orders = (
       <div>
-        {props.orders.map(order => (
+        {props.orders.map((order) => (
           <Order key={order.id} ingredients={order.ingredients} price={order.price} />
         ))}
       </div>
@@ -27,15 +27,15 @@ const orders = props => {
   return orders;
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   orders: state.order.orders,
   loading: state.order.loading,
   token: state.auth.token,
   userId: state.auth.userId,
 });
 
-const mapDispatchToProps = dispatch => ({
-  onFetchOrders: payload => dispatch(actions.fetchOrders(payload)),
+const mapDispatchToProps = (dispatch) => ({
+  onFetchOrders: (payload) => dispatch(actions.fetchOrders(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(orders, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios));

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import classes from './Burger.css';
-import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
+import classes from './styles.module.css';
+import BurgerIngredient from './BurgerIngredient';
 
-const burger = props => {
+const burger = (props) => {
   if (!props.ingredients) return null;
   let transformedIngredients = Object.keys(props.ingredients)
-    .map(igKey => {
+    .map((igKey) => {
       const number = props.ingredients[igKey];
       const listBurgerIngredient = [];
       for (let el = 1; el <= number; el += 1) {

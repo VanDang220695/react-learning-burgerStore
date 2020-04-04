@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import axios from '../../axios-orders';
 import AuxContainer from '../../hoc/AuxContainer';
-import Burger from '../../components/Burger/Burger';
+import Burger from '../../components/Burger';
 import BurgerControls from '../../components/Burger/BuildControls';
 import Modal from '../../components/UI/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary';
@@ -12,28 +12,28 @@ import Spinner from '../../components/UI/Spinner';
 import * as actions from '../../store/actions';
 import withErrorHandler from '../../hoc/withErrorHandler';
 
-export const BurgerBuilder = props => {
+export const BurgerBuilder = (props) => {
   const [purchasing, setPurchasing] = useState(false);
   const dispatch = useDispatch();
 
-  const ings = useSelector(state => {
+  const ings = useSelector((state) => {
     return state.burgerBuilder.ingredients;
   });
-  const totalPrice = useSelector(state => {
+  const totalPrice = useSelector((state) => {
     return state.burgerBuilder.totalPrice;
   });
-  const error = useSelector(state => {
+  const error = useSelector((state) => {
     return state.burgerBuilder.error;
   });
-  const isAuthenticated = useSelector(state => {
+  const isAuthenticated = useSelector((state) => {
     return !!state.auth.token;
   });
 
-  const onIngredientAdded = ingName => dispatch(actions.addIngredient(ingName));
-  const onIngredientRemoved = ingName => dispatch(actions.removeIngredient(ingName));
-  const onInitIngredient = useCallback(() => dispatch(actions.initIngredients()), []);
+  const onIngredientAdded = (ingName) => dispatch(actions.addIngredient(ingName));
+  const onIngredientRemoved = (ingName) => dispatch(actions.removeIngredient(ingName));
+  const onInitIngredient = useCallback(() => dispatch(actions.initIngredients()), [dispatch]);
   const onInitPurchase = () => dispatch(actions.purchaseInit());
-  const onSetAuthRedirectPath = path => dispatch(actions.setAuthRedirectPath(path));
+  const onSetAuthRedirectPath = (path) => dispatch(actions.setAuthRedirectPath(path));
 
   const { history } = props;
 
@@ -41,9 +41,9 @@ export const BurgerBuilder = props => {
     onInitIngredient();
   }, [onInitIngredient]);
 
-  const updatePurchaseState = ingredients => {
+  const updatePurchaseState = (ingredients) => {
     const sum = Object.keys(ingredients)
-      .map(igKey => {
+      .map((igKey) => {
         return ingredients[igKey];
       })
       .reduce((sum, el) => {

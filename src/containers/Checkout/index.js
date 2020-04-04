@@ -6,12 +6,10 @@ import CheckoutSummary from '../../components/Order/CheckoutSummary';
 import ContactData from './ContactData';
 import * as actionTypes from '../../store/actions';
 
-const checkout = props => {
+const Checkout = (props) => {
   const { onInitPurchase } = props;
   useEffect(() => {
-    return () => {
-      onInitPurchase();
-    };
+    return () => onInitPurchase();
   }, [onInitPurchase]);
 
   const checkoutCancelledHandler = () => {
@@ -40,15 +38,15 @@ const checkout = props => {
   }
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ings: state.burgerBuilder.ingredients,
     purchased: state.order.purchased,
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onInitPurchase: () => dispatch(actionTypes.purchaseInit()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(checkout);
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

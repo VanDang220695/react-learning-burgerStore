@@ -1,9 +1,9 @@
 import React from 'react';
 
 import NavItem from './NavigationItem';
-import classes from './index.css';
+import classes from './styles.module.css';
 
-const navigationItems = props => (
+const navigationItems = (props) => (
   <ul className={classes.NavigationItems}>
     <NavItem link='/' exact>
       Burger Builder

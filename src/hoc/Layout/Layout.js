@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import AuxContainer from '../AuxContainer';
-import classes from './Layout.css';
+import classes from './styles.module.css';
 
 import Toolbar from '../../components/Navigation/ToolBar';
 import SideDrawer from '../../components/Navigation/SideDrawer';
 
-const layout = props => {
+const Layout = (props) => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
 
   const sideDrawerClosedHandler = () => {
     setShowSideDrawer(false);
   };
   const sideDrawerToggleHandler = () => {
-    setShowSideDrawer(prevState => !prevState);
+    setShowSideDrawer((prevState) => !prevState);
   };
 
   return (
@@ -32,8 +32,8 @@ const layout = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: !!state.auth.token,
 });
 
-export default connect(mapStateToProps)(layout);
+export default connect(mapStateToProps)(Layout);

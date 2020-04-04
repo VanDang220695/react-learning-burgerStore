@@ -19,14 +19,14 @@ const Auth = React.lazy(() => {
   return import('./containers/Auth');
 });
 
-const app = props => {
+const App = (props) => {
   const { onTryAutoSignup } = props;
   useEffect(() => {
-    props.onTryAutoSignup();
+    onTryAutoSignup();
   }, [onTryAutoSignup]);
   let routes = (
     <Switch>
-      <Route path='/auth' render={props => <Auth {...props} />} />
+      <Route path='/auth' render={(props) => <Auth {...props} />} />
       <Route path='/' exact component={BurgerBuilder} />
       <Redirect to='/' />
     </Switch>
@@ -34,9 +34,9 @@ const app = props => {
   if (props.isAuthenticated) {
     routes = (
       <Switch>
-        <Route path='/checkout' render={props => <Checkout {...props} />} />
-        <Route path='/orders' component={props => <Orders {...props} />} />
-        <Route path='/auth' render={props => <Auth {...props} />} />
+        <Route path='/checkout' render={(props) => <Checkout {...props} />} />
+        <Route path='/orders' component={(props) => <Orders {...props} />} />
+        <Route path='/auth' render={(props) => <Auth {...props} />} />
         <Route path='/logout' component={Logout} />
         <Route path='/' exact component={BurgerBuilder} />
         <Redirect to='/' />
@@ -52,14 +52,14 @@ const app = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: !!state.auth.token,
 });
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState()),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(app);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

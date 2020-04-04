@@ -12,7 +12,7 @@ import { updateObject, checkValidity } from '../../shared/utility';
 
 import classes from './styles.css';
 
-const auth = props => {
+const Auth = (props) => {
   const [controls, setControls] = useState({
     email: {
       elementType: 'input',
@@ -65,13 +65,13 @@ const auth = props => {
     setControls(updateControls);
   };
 
-  const submitHandler = e => {
+  const submitHandler = (e) => {
     e.preventDefault();
     onAuth(controls.email.value, controls.password.value, isSignup);
   };
 
   const switchAuthModeHandler = () => {
-    setIsSignup(prevState => !prevState);
+    setIsSignup((prevState) => !prevState);
   };
 
   const formElementArray = [];
@@ -82,7 +82,7 @@ const auth = props => {
     });
   }
 
-  let form = formElementArray.map(formElement => (
+  let form = formElementArray.map((formElement) => (
     <Input
       key={formElement.id}
       elementType={formElement.config.elementType}
@@ -91,7 +91,7 @@ const auth = props => {
       invalid={!formElement.config.valid}
       touched={formElement.config.touched}
       valueType={formElement.id}
-      changed={event => inputChangeHanlder(event, formElement.id)}
+      changed={(event) => inputChangeHanlder(event, formElement.id)}
       shouldValidate={formElement.config.valdation}
     />
   ));
@@ -130,7 +130,7 @@ const auth = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   loading: state.auth.loading,
   error: state.auth.error,
   isAuthenticated: !!state.auth.token,
@@ -138,9 +138,9 @@ const mapStateToProps = state => ({
   authRedirectPath: state.auth.authRedirectPath,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
   onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
