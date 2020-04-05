@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import axios from '../../axios-orders';
+import configAxios from '../../utils/axios-orders';
 import AuxContainer from '../../hoc/AuxContainer';
 import Burger from '../../components/Burger';
 import BurgerControls from '../../components/Burger/BuildControls';
@@ -10,6 +10,8 @@ import OrderSummary from '../../components/Burger/OrderSummary';
 
 import * as actions from '../../store/actions';
 import withErrorHandler from '../../hoc/withErrorHandler';
+
+const axios = configAxios();
 
 export const BurgerBuilder = (props) => {
   const [purchasing, setPurchasing] = useState(false);

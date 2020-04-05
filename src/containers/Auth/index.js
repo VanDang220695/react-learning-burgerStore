@@ -53,9 +53,9 @@ const Auth = (props) => {
   return (
     <div className={classes.Auth}>
       {authRedirect}
-      {errorMesssage}
       <Spinner spinning={props.loading}>
         <p className={classes.title__form_auth}>{!isSignup ? 'Login' : 'Register'}</p>
+        {errorMesssage}
         <Form initialValues={{ remember: true }} name='authentication' onFinish={submitHandler}>
           {form}
           <Button type='primary' block htmlType='submit' style={{ marginTop: '16px' }}>

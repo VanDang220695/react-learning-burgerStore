@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import Order from '../../components/Order';
 import Spinner from '../../components/UI/Spinner';
 
-import axios from '../../axios-orders';
+import configAxios from '../../utils/axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler';
 
 import * as actions from '../../store/actions';
+
+const axios = configAxios();
 
 const Orders = (props) => {
   const { token, userId, onFetchOrders } = props;

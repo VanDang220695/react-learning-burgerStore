@@ -1,7 +1,7 @@
 import { put } from 'redux-saga/effects';
 
 import * as actions from '../actions';
-import axios from '../../axios-orders';
+import axios from '../../utils/axios-orders';
 
 export function* purchaseBurger({ payload }) {
   const { token, ...restparams } = payload;

@@ -1,7 +1,10 @@
-import axios from 'axios';
 import { put, delay, call } from 'redux-saga/effects';
 
+import configAxios from '../../utils/axios-orders';
+
 import * as actions from '../actions';
+
+const axios = configAxios(true);
 
 const API_KEY = 'AIzaSyC1JYOQTBx7_t3ozgiT8ILbMEHQRL8Qgzw';
 
@@ -25,18 +28,39 @@ export function* authUser({ payload }) {
     password,
     returnSecureToken: true,
   };
-  let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+  let url = `accounts:signUp?key=${API_KEY}`;
   if (!isSignUp) {
-    url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
+    url = `accounts:signInWithPassword?key=${API_KEY}`;
   }
-  let res;
+  let response;
   try {
-    res = yield axios.post(url, authData);
-    const { idToken, localId, expiresIn } = res.data;
+    response = yield axios.post(url, authData);
+    const { idToken, localId, expiresIn } = response.data;
     const expirationDate = yield new Date(new Date().getTime() + Number(expiresIn) * 1000);
     yield localStorage.setItem('token', idToken);
     yield localStorage.setItem('expirationDate', expirationDate);
     yield localStorage.setItem('userId', localId);
+    // Verify email
+    if (isSignUp) {
+      yield axios.post(`accounts:sendOobCode?key=${API_KEY}`, {
+        requestType: 'VERIFY_EMAIL',
+        idToken,
+      });
+    }
+    const { data: userInformation } = yield axios.post(`accounts:update?key=${API_KEY}`, {
+      ...authData,
+      idToken,
+    });
+
+    if (!userInformation.emailVerified) {
+      yield put(
+        actions.authFailed({
+          message: 'Your email not verify',
+        }),
+      );
+      return;
+    }
+
     yield put(actions.authSuccess(idToken, localId));
     yield put(actions.checkAuthTimeout(Number(expiresIn)));
   } catch (error) {

@@ -6,12 +6,15 @@ import { Button } from 'antd';
 import Spinner from '../../../components/UI/Spinner';
 import Input from '../../../components/UI/Input';
 
-import axios from '../../../axios-orders';
+import configAxios from '../../../utils/axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actionTypes from '../../../store/actions';
 import { updateObject, checkValidity } from '../../../shared/utility';
 
 import classes from './styles.module.css';
+
+const axios = configAxios();
+
 const ContactData = (props) => {
   const [orderForm, setOrderForm] = useState({
     name: {
