@@ -26,27 +26,33 @@ const BurgerBuilder = React.lazy(() => {
   return import('./containers/BurgerBuilder');
 });
 
+const ProfileUser = React.lazy(() => {
+  return import('./containers/Profile');
+});
+
 const App = (props) => {
   const { onTryAutoSignup } = props;
   useEffect(() => {
     onTryAutoSignup();
   }, [onTryAutoSignup]);
-  let routes = (
-    <Switch>
-      <Route path='/auth' render={(props) => <Auth {...props} />} />
-      <Route path='/' exact component={BurgerBuilder} />
-      <Redirect to='/' />
-    </Switch>
-  );
+  let routes;
   if (props.isAuthenticated) {
     routes = (
       <Switch>
         <Route path='/checkout' render={(props) => <Checkout {...props} />} />
         <Route path='/orders' render={(props) => <Orders {...props} />} />
         <Route path='/auth' render={(props) => <Auth {...props} />} />
+        <Route path='/profile' render={(props) => <ProfileUser {...props} />} />
         <Route path='/logout' component={Logout} />
-        <Route path='/' exact render={(props) => <BurgerBuilder {...props} />} />
+        <Route path='/' exact component={BurgerBuilder} />
         <Redirect to='/' />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path='/auth' render={(props) => <Auth {...props} />} />
+        <Route path='/' exact component={BurgerBuilder} />
       </Switch>
     );
   }

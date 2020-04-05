@@ -18,6 +18,8 @@
   color: blue;
   text-align: center;
   font-size: 26px;
+  padding: 0;
+  margin: 0;
 }
 @media (min-width: 600px) {
   .Auth {

@@ -14,7 +14,7 @@ export const authSuccess = (token, userId) => {
   };
 };
 
-export const authFailed = error => {
+export const authFailed = (error) => {
   return {
     type: actionTypes.AUTH_FAILDED,
     error,
@@ -33,7 +33,7 @@ export const logoutSucceed = () => {
   };
 };
 
-export const checkAuthTimeout = expirationTime => {
+export const checkAuthTimeout = (expirationTime) => {
   return {
     type: actionTypes.AUTH_CHECK_TIMEOUT,
     expirationTime,
@@ -51,7 +51,7 @@ export const auth = (email, password, isSignUp) => {
   };
 };
 
-export const setAuthRedirectPath = path => {
+export const setAuthRedirectPath = (path) => {
   return {
     type: actionTypes.SET_AUTH_REDIRECT_PATH,
     path,
@@ -61,5 +61,11 @@ export const setAuthRedirectPath = path => {
 export const authCheckState = () => {
   return {
     type: actionTypes.AUTH_CHECK_INITIAL_STATE,
+  };
+};
+
+export const authSignup = () => {
+  return {
+    type: actionTypes.AUTH_SIGNUP,
   };
 };

@@ -1,0 +1,9 @@
+.Form__Container {
+  margin: 0 auto;
+  border: 1px solid #eee;
+  min-height: 500px;
+  padding: 50px 20px;
+  width: 80%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 3px #ccc;
+}

@@ -37,15 +37,15 @@ export function* authUser({ payload }) {
     response = yield axios.post(url, authData);
     const { idToken, localId, expiresIn } = response.data;
     const expirationDate = yield new Date(new Date().getTime() + Number(expiresIn) * 1000);
-    yield localStorage.setItem('token', idToken);
-    yield localStorage.setItem('expirationDate', expirationDate);
-    yield localStorage.setItem('userId', localId);
+
     // Verify email
     if (isSignUp) {
       yield axios.post(`accounts:sendOobCode?key=${API_KEY}`, {
         requestType: 'VERIFY_EMAIL',
         idToken,
       });
+      yield put(actions.authSignup());
+      return;
     }
     const { data: userInformation } = yield axios.post(`accounts:update?key=${API_KEY}`, {
       ...authData,
@@ -60,7 +60,9 @@ export function* authUser({ payload }) {
       );
       return;
     }
-
+    yield localStorage.setItem('token', idToken);
+    yield localStorage.setItem('expirationDate', expirationDate);
+    yield localStorage.setItem('userId', localId);
     yield put(actions.authSuccess(idToken, localId));
     yield put(actions.checkAuthTimeout(Number(expiresIn)));
   } catch (error) {

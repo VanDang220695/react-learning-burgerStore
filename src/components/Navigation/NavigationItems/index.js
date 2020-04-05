@@ -8,7 +8,12 @@ const navigationItems = (props) => (
     <NavItem link='/' exact>
       Burger Builder
     </NavItem>
-    {props.isAuthenticated && <NavItem link='/orders'>Orders</NavItem>}
+    {props.isAuthenticated && (
+      <React.Fragment>
+        <NavItem link='/orders'>Orders</NavItem>
+        <NavItem link='/profile'>Profile</NavItem>
+      </React.Fragment>
+    )}
     {!props.isAuthenticated ? (
       <NavItem link='/auth'>Authenticate</NavItem>
     ) : (

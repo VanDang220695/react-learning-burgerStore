@@ -14,16 +14,30 @@ import classes from './styles.module.css';
 const Auth = (props) => {
   const [isSignup, setIsSignup] = useState(false);
 
-  const { buildingBurger, authRedirectPath, onSetRedirectPath, onAuth } = props;
+  const { isSignupSuccess, buildingBurger, authRedirectPath, onSetRedirectPath, onAuth } = props;
   useEffect(() => {
     if (!buildingBurger && authRedirectPath !== '/') {
       onSetRedirectPath();
     }
   }, [buildingBurger, authRedirectPath, onSetRedirectPath]);
 
+  useEffect(() => {
+    if (isSignupSuccess) {
+      setIsSignup(false);
+    }
+  }, [isSignupSuccess]);
+
+  let form = <FormSignup />;
+  if (!isSignup || isSignupSuccess) {
+    form = <FormSignin />;
+  }
+
   const submitHandler = (formValue) => {
     const { email, password } = formValue;
     onAuth(email, password, isSignup);
+    if (isSignupSuccess) {
+      form = <FormSignin />;
+    }
   };
 
   const switchAuthModeHandler = () => {
@@ -43,11 +57,6 @@ const Auth = (props) => {
   let authRedirect = null;
   if (props.isAuthenticated) {
     authRedirect = <Redirect to={props.authRedirectPath} />;
-  }
-
-  let form = <FormSignup />;
-  if (!isSignup) {
-    form = <FormSignin />;
   }
 
   return (
@@ -76,6 +85,7 @@ const mapStateToProps = (state) => ({
   isAuthenticated: !!state.auth.token,
   buildingBurger: state.burgerBuilder.building,
   authRedirectPath: state.auth.authRedirectPath,
+  isSignupSuccess: state.auth.isSingupSuccess,
 });
 
 const mapDispatchToProps = (dispatch) => ({

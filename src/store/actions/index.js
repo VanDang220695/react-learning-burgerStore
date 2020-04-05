@@ -26,4 +26,5 @@ export {
   logoutSucceed,
   checkAuthTimeout,
   authFailed,
+  authSignup,
 } from './auth';
