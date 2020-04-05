@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import classes from "./styles.css";
+import classes from './styles.module.css';
 
-const input = props => {
+const input = (props) => {
   let inputElement = null;
   const inputClasses = [classes.InputElement];
 
@@ -13,41 +13,35 @@ const input = props => {
   let validationError = null;
   if (props.invalid && props.touched) {
     validationError = (
-      <p className={classes.ValidationError}>
-        Please enter a valid {props.valueType}
-      </p>
+      <p className={classes.ValidationError}>Please enter a valid {props.valueType}</p>
     );
   }
 
   switch (props.elementType) {
-    case "input":
+    case 'input':
       inputElement = (
         <input
-          className={inputClasses.join(" ")}
+          className={inputClasses.join(' ')}
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
         />
       );
       break;
-    case "textarea":
+    case 'textarea':
       inputElement = (
         <textarea
-          className={inputClasses.join(" ")}
+          className={inputClasses.join(' ')}
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
         />
       );
       break;
-    case "select":
+    case 'select':
       inputElement = (
-        <select
-          className={inputClasses.join(" ")}
-          value={props.value}
-          onChange={props.changed}
-        >
-          {props.elementConfig.options.map(opt => (
+        <select className={inputClasses.join(' ')} value={props.value} onChange={props.changed}>
+          {props.elementConfig.options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.displayValue}
             </option>
@@ -57,11 +51,7 @@ const input = props => {
       break;
     default:
       inputElement = (
-        <input
-          className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-        />
+        <input className={inputClasses.join(' ')} {...props.elementConfig} value={props.value} />
       );
       break;
   }

@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import classes from "./index.css";
+import classes from './styles.module.css';
 
-const button = props => (
+const button = (props) => (
   <button
     disabled={props.disabled}
-    className={[classes.Button, classes[props.btnType]].join(" ")}
+    className={[classes.Button, classes[props.btnType]].join(' ')}
     onClick={props.clicked}
   >
     {props.children}

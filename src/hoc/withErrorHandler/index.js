@@ -5,7 +5,8 @@ import AuxContainer from '../AuxContainer';
 import useHttpErrorHandler from '../../hooks/http-error-handler';
 
 const withErrorHandler = (WrappedComponent, axios) => {
-  return props => {
+  // eslint-disable-next-line react/display-name
+  return (props) => {
     const [error, clearError] = useHttpErrorHandler(axios);
 
     return (

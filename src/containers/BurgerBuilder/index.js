@@ -7,7 +7,6 @@ import Burger from '../../components/Burger';
 import BurgerControls from '../../components/Burger/BuildControls';
 import Modal from '../../components/UI/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary';
-import Spinner from '../../components/UI/Spinner';
 
 import * as actions from '../../store/actions';
 import withErrorHandler from '../../hoc/withErrorHandler';
@@ -22,9 +21,9 @@ export const BurgerBuilder = (props) => {
   const totalPrice = useSelector((state) => {
     return state.burgerBuilder.totalPrice;
   });
-  const error = useSelector((state) => {
-    return state.burgerBuilder.error;
-  });
+  // const error = useSelector((state) => {
+  //   return state.burgerBuilder.error;
+  // });
   const isAuthenticated = useSelector((state) => {
     return !!state.auth.token;
   });
@@ -78,7 +77,7 @@ export const BurgerBuilder = (props) => {
   }
 
   let orderSummary = null;
-  let burger = error ? <p>This is your err</p> : <Spinner />;
+  let burger;
 
   if (ings) {
     burger = (

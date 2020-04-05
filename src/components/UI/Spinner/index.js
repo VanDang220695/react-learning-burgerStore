@@ -1,7 +1,13 @@
 import React from 'react';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
-import classes from './styles.css';
+const antIcon = <LoadingOutlined style={{ fontSize: 24, color: 'blue' }} spin />;
 
-const spinner = () => <div className={classes.Loader}>Loading...</div>;
+const Spinner = ({ spinning, children, className = '' }) => (
+  <Spin tip='Loading...' className={className} spinning={spinning} indicator={antIcon}>
+    {children}
+  </Spin>
+);
 
-export default spinner;
+export default Spinner;

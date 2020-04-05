@@ -1,10 +1,10 @@
 import React from 'react';
 
-import classes from './index.css';
+import classes from './styles.module.css';
 import AuxContainer from '../../../hoc/AuxContainer';
 import Backdrop from '../BackDrop';
 
-const modal = props => {
+const modal = (props) => {
   return (
     <AuxContainer>
       <Backdrop show={props.show} clicked={props.modalClosed} />
