@@ -27,6 +27,14 @@ const FormSigin = () => {
             required: true,
             message: 'Please input your password!',
           },
+          {
+            min: 6,
+            message: 'Minimum password length six characters',
+          },
+          {
+            max: 10,
+            message: 'Maximum password length ten characters',
+          },
         ]}
       >
         <Input.Password
