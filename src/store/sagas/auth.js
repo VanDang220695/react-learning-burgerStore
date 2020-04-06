@@ -1,6 +1,7 @@
 import { put, delay, call } from 'redux-saga/effects';
 
 import configAxios from '../../utils/axios-orders';
+import { updateProfile } from '../../services/profiles';
 
 import * as actions from '../actions';
 
@@ -43,6 +44,10 @@ export function* authUser({ payload }) {
       yield axios.post(`accounts:sendOobCode?key=${API_KEY}`, {
         requestType: 'VERIFY_EMAIL',
         idToken,
+      });
+      yield call(updateProfile, {
+        email,
+        userId: localId,
       });
       yield put(actions.authSignup());
       return;

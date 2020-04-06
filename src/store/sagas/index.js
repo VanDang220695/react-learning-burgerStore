@@ -4,6 +4,7 @@ import * as actionTypes from '../actions/actionTypes';
 import { logout, checkAuthTimeout, authUser, authCheckState } from './auth';
 import { initIngredients } from './burgerBuilder';
 import { purchaseBurger, fetchOrders } from './order';
+import { getProfile } from './profile';
 
 export function* watchAuth() {
   yield all([
@@ -21,4 +22,8 @@ export function* watchBurgerBuilder() {
 export function* watchOrder() {
   yield takeLatest(actionTypes.PURCHASE_BURGER, purchaseBurger);
   yield takeEvery(actionTypes.FETCH_ORDER, fetchOrders);
+}
+
+export function* watchProfile() {
+  yield takeEvery(actionTypes.PROFILE_GET_DATA, getProfile);
 }

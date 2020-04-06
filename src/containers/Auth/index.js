@@ -27,9 +27,9 @@ const Auth = (props) => {
     }
   }, [isSignupSuccess]);
 
-  let form = <FormSignup />;
-  if (!isSignup || isSignupSuccess) {
-    form = <FormSignin />;
+  let form = <FormSignin />;
+  if (isSignup) {
+    form = <FormSignup />;
   }
 
   const submitHandler = (formValue) => {

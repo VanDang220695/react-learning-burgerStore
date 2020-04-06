@@ -28,3 +28,5 @@ export {
   authFailed,
   authSignup,
 } from './auth';
+
+export { getProfile, getProfileStart, getProfileSuccess, getProfileFailed } from './profile';
