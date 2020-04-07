@@ -2,7 +2,7 @@
   margin: 0 auto;
   border: 1px solid #eee;
   min-height: 500px;
-  padding: 20px 20px 0;
+  padding: 20px;
   width: 60%;
   box-sizing: border-box;
   box-shadow: 0 2px 3px #ccc;
@@ -14,8 +14,7 @@
   padding: 0;
 }
 .Avatar {
-  margin-top: 40px;
-  margin-left: calc(50% - 128px);
+  margin-left: calc(50% - 56px);
 }
 .Avatar__Container {
   display: flex;
@@ -25,8 +24,8 @@
   height: 100%;
 }
 .Group__Button__Container {
-  width: 256px;
-  margin: auto auto 28px;
+  width: 128px;
+  margin: auto auto 0;
 }
 .Group__Button {
   width: 100%;
