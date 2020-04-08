@@ -1,0 +1,13 @@
+[debug] [2020-04-08T07:29:10.397Z] ----------------------------------------------------------------------
+[debug] [2020-04-08T07:29:10.399Z] Command:       /usr/local/Cellar/node/13.11.0/bin/node /usr/local/bin/firebase deploy
+[debug] [2020-04-08T07:29:10.399Z] CLI Version:   8.0.2
+[debug] [2020-04-08T07:29:10.399Z] Platform:      darwin
+[debug] [2020-04-08T07:29:10.400Z] Node Version:  v13.11.0
+[debug] [2020-04-08T07:29:10.401Z] Time:          Wed Apr 08 2020 14:29:10 GMT+0700 (Indochina Time)
+[debug] [2020-04-08T07:29:10.401Z] ----------------------------------------------------------------------
+[debug] [2020-04-08T07:29:10.401Z] 
+[debug] [2020-04-08T07:29:10.408Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-08T07:29:10.408Z] > authorizing via signed-in user
+[debug] [2020-04-08T07:29:10.409Z] [iam] checking project react-my-burger-85174 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-04-08T07:29:10.411Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/react-my-burger-85174:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}

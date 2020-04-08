@@ -164,6 +164,7 @@ const ProfileForm = withFormik({
     const { dob, ...restparams } = values;
     const { updateProfile } = props;
     await updateProfile({ dob: moment(dob).toISOString(), ...restparams });
+    props.history.goBack();
   },
 })(ProfileUser);
 

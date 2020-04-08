@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Modal } from 'antd';
 
 import configAxios from '../../utils/axios-orders';
 import AuxContainer from '../../hoc/AuxContainer';
 import Burger from '../../components/Burger';
 import BurgerControls from '../../components/Burger/BuildControls';
-import Modal from '../../components/UI/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary';
 
 import * as actions from '../../store/actions';
@@ -20,12 +20,12 @@ export const BurgerBuilder = (props) => {
   const ings = useSelector((state) => {
     return state.burgerBuilder.ingredients;
   });
+  const profile = useSelector((state) => {
+    return state.profile.profile;
+  });
   const totalPrice = useSelector((state) => {
     return state.burgerBuilder.totalPrice;
   });
-  // const error = useSelector((state) => {
-  //   return state.burgerBuilder.error;
-  // });
   const isAuthenticated = useSelector((state) => {
     return !!state.auth.token;
   });
@@ -68,6 +68,16 @@ export const BurgerBuilder = (props) => {
 
   const purchaseContinueHandler = () => {
     onInitPurchase();
+
+    if (!profile.address) {
+      return Modal.warning({
+        title: 'Please update profile first',
+        onOk: () => {
+          props.history.push('/profile');
+          return;
+        },
+      });
+    }
     history.push('/checkout');
   };
 
@@ -106,19 +116,19 @@ export const BurgerBuilder = (props) => {
         </div>
       </AuxContainer>
     );
-    orderSummary = (
-      <OrderSummary
-        price={totalPrice.toFixed(2)}
-        ingredients={ings}
-        purchaseCanceled={purchaseCancelHandler}
-        purchaseContinued={purchaseContinueHandler}
-      />
-    );
+    orderSummary = <OrderSummary price={totalPrice.toFixed(2)} ingredients={ings} />;
   }
-
   return (
     <AuxContainer>
-      <Modal show={purchasing} modalClosed={purchaseCancelHandler}>
+      <Modal
+        closable={false}
+        onOk={() => purchaseContinueHandler()}
+        onCancel={() => purchaseCancelHandler()}
+        centered
+        okText='Continue'
+        cancelText='Cancel'
+        visible={purchasing}
+      >
         {orderSummary}
       </Modal>
       <div>{burger}</div>
