@@ -41,13 +41,17 @@ const tailFormItemLayout = {
 };
 
 const ProfileUser = (props) => {
-  const { getFullProfile, profile } = props;
+  const {
+    getFullProfile,
+    values,
+    profile: { fullName },
+  } = props;
 
   useEffect(() => {
     getFullProfile();
   }, [getFullProfile]);
 
-  const { fullName } = profile;
+  const { dob, imageUrl } = values;
 
   return (
     <div className={classes.Form__Container}>
@@ -71,12 +75,12 @@ const ProfileUser = (props) => {
                 name='dob'
                 required
                 label='Day of birth'
-                value={props.values.dob}
+                value={dob}
                 onChange={props.setFieldValue}
               />
               <FormTextArea name='note' label='Note' />
               <FormUploadImage
-                value={props.values.imageUrl}
+                value={imageUrl}
                 name='imageUrl'
                 label='Photo'
                 setFieldValue={props.setFieldValue}
@@ -101,7 +105,7 @@ const ProfileUser = (props) => {
             <div className={classes.Avatar__Container}>
               <div>
                 <Avatar
-                  src={props.values.imageUrl}
+                  src={imageUrl}
                   className={classes.Avatar}
                   size={128}
                   shape='square'
@@ -158,9 +162,8 @@ const ProfileForm = withFormik({
   handleSubmit: async (values, formigBag) => {
     const { props } = formigBag;
     const { dob, ...restparams } = values;
-    const { getFullProfile, updateProfile } = props;
-    await updateProfile({ dob: moment(dob).toString(), ...restparams });
-    await getFullProfile();
+    const { updateProfile } = props;
+    await updateProfile({ dob: moment(dob).toISOString(), ...restparams });
   },
 })(ProfileUser);
 

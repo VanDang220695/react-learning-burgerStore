@@ -7,14 +7,12 @@ export function* getProfile() {
   try {
     yield put(actions.getProfileStart());
     const response = yield call(getProfileUser, {});
-    const dataFetch = [];
-    for (let key in response.data) {
-      dataFetch.push({
-        ...response.data[key],
-        id: key,
-      });
+    let dataFromResponse = {};
+    if (response && response.data) {
+      dataFromResponse = response.data;
     }
-    yield put(actions.getProfileSuccess(dataFetch[0] || {}));
+
+    yield put(actions.getProfileSuccess(dataFromResponse));
   } catch (error) {
     yield put(actions.getProfileFailed(error.response.error));
   }
@@ -24,6 +22,7 @@ export function* updateProfileUser({ payload }) {
   try {
     yield put(actions.getProfileStart());
     yield call(updateProfile, payload);
+    yield put(actions.getProfile());
     yield put(actions.setErrorProfileUpdate(false));
   } catch (error) {
     yield put(actions.setErrorProfileUpdate(true));
