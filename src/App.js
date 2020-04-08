@@ -30,11 +30,17 @@ const ProfileUser = React.lazy(() => {
   return import('./containers/Profile');
 });
 
+const token = localStorage.getItem('token');
+
 const App = (props) => {
-  const { onTryAutoSignup } = props;
+  const { onTryAutoSignup, onGetProfileUser, onInitIngredient } = props;
   useEffect(() => {
-    onTryAutoSignup();
-  }, [onTryAutoSignup]);
+    if (token) {
+      onTryAutoSignup();
+      onGetProfileUser();
+      onInitIngredient();
+    }
+  }, [onTryAutoSignup, onGetProfileUser, onInitIngredient]);
   let routes;
   if (props.isAuthenticated) {
     routes = (
@@ -72,6 +78,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState()),
+    onInitIngredient: () => dispatch(actions.initIngredients()),
+    onGetProfileUser: () => dispatch(actions.getProfile()),
   };
 };
 

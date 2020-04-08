@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Skeleton } from 'antd';
 
 import Order from '../../components/Order';
-import Spinner from '../../components/UI/Spinner';
 
 import configAxios from '../../utils/axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler';
@@ -16,17 +16,22 @@ const Orders = (props) => {
   useEffect(() => {
     onFetchOrders({ token, userId });
   }, [token, userId, onFetchOrders]);
-  let orders = <Spinner />;
-  if (!props.loading) {
-    orders = (
-      <div>
+
+  return (
+    <div style={{ margin: '0 auto', width: '80%' }}>
+      <Skeleton loading={props.loading}>
         {props.orders.map((order) => (
-          <Order key={order.id} ingredients={order.ingredients} price={order.price} />
+          <Order
+            id={order.id}
+            key={order.id}
+            ingredients={order.ingredients}
+            price={order.price}
+            createAt={order.createAt}
+          />
         ))}
-      </div>
-    );
-  }
-  return orders;
+      </Skeleton>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => ({

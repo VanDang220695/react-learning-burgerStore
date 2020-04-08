@@ -1,6 +1,6 @@
 .Checkout__Container {
   margin: 0 auto;
-  width: 80%;
+  width: 60%;
   height: 100%;
   box-shadow: 0 4px 5px #eee;
 }
@@ -10,4 +10,26 @@ p.Order__title {
   font-size: 24px;
   margin: 0;
   padding: 0;
+}
+.Capital {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 700;
+}
+.Money {
+  font-size: 16px;
+  font-weight: bolder;
+  color: green;
+}
+.Txt__Thank {
+  font-size: 16px;
+  font-weight: bolder;
+  color: blue;
+  text-align: center;
+}
+.Txt__Delivery {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: green;
 }

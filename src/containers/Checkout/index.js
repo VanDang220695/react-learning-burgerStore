@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { List } from 'antd';
+import { List, Row, Col, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 
 import * as actionTypes from '../../store/actions';
@@ -11,27 +11,55 @@ const INGREDIENT_PRICE = {
   cheese: 0.4,
   meat: 1.3,
   bacon: 0.7,
+  bread: 4,
 };
 
 const Checkout = (props) => {
-  const { onInitPurchase, profile, ings } = props;
+  const { onInitPurchase, address, ings, totalPrice } = props;
   useEffect(() => {
     return () => onInitPurchase();
   }, [onInitPurchase]);
 
-  // if (!props.ings || props.purchased) {
-  //   props.history.push('/');
-  // }
+  if (!props.ings || props.purchased) {
+    props.history.push('/');
+  }
 
-  const showIngredients = Object.keys(ings || {}).map((igKey) => {
+  const ingsIngredientsShow = { ...ings, bread: 1 };
+
+  const showIngredients = Object.keys(ingsIngredientsShow).map((igKey) => {
     return (
-      <li key={igKey}>
-        <span style={{ textTransform: 'capitalize' }}>{igKey}</span>
-        <span style={{ marginLeft: '50px', marginRight: '10px' }}>{ings[igKey]}</span>x
-        <span style={{ marginLeft: '10px' }}>{INGREDIENT_PRICE[igKey]}</span>
-      </li>
+      <Row key={igKey}>
+        <Col span={20}>
+          <div className={classes.Capital}>{igKey}</div>
+        </Col>
+        <Col span={1}>
+          <div>{ingsIngredientsShow[igKey]}</div>
+        </Col>
+        <Col span={1}>
+          <div>x</div>
+        </Col>
+        <Col span={1}>
+          <div className={classes.Money}>{INGREDIENT_PRICE[igKey]}</div>
+        </Col>
+        <Col span={1}>
+          <div className={classes.Money}>$</div>
+        </Col>
+      </Row>
     );
   });
+
+  const onOrderHandler = () => {
+    props.onOrderBurger({
+      ingredients: ings,
+      price: totalPrice,
+      createAt: new Date().toISOString(),
+    });
+    props.history.push('/');
+  };
+
+  const onCancelHandler = () => {
+    props.history.push('/');
+  };
 
   return (
     <div className={classes.Checkout__Container}>
@@ -44,16 +72,30 @@ const Checkout = (props) => {
         }
         bordered
       >
-        <div style={{ margin: '20px' }}>
-          <p style={{ fontSize: '18px' }}>Thanks for your buying. I hope you taste well</p>
-          <ul>
-            <li key='basic'>
-              <span style={{ textTransform: 'capitalize' }}>Bread</span>
-              <span style={{ marginLeft: '70px' }}>4$</span>
-            </li>
-            {showIngredients}
-          </ul>
+        <div style={{ margin: '20px 50px' }}>
+          <p className={classes.Txt__Thank}>
+            Thanks for your buying. I hope you taste well. See you again
+          </p>
+          {showIngredients}
           <hr />
+          <Row>
+            <Col span={22}>
+              <div className={classes.Capital}>Total</div>
+            </Col>
+            <Col span={1}>
+              <div className={classes.Money}>{totalPrice.toFixed(2)}</div>
+            </Col>
+            <Col span={1}>
+              <div className={classes.Money}>$</div>
+            </Col>
+          </Row>
+          <p className={classes.Txt__Delivery}>Delivery at {address}</p>
+          <Row justify='end'>
+            <Button onClick={onCancelHandler}>CANCEL</Button>
+            <Button style={{ marginLeft: '16px' }} type='primary' onClick={onOrderHandler}>
+              ORDER
+            </Button>
+          </Row>
         </div>
       </List>
     </div>
@@ -65,12 +107,13 @@ const mapStateToProps = (state) => {
     ings: state.burgerBuilder.ingredients,
     totalPrice: state.burgerBuilder.totalPrice,
     purchased: state.order.purchased,
-    profile: state.profile.profile,
+    address: state.profile.profile.address,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   onInitPurchase: () => dispatch(actionTypes.purchaseInit()),
+  onOrderBurger: (payload) => dispatch(actionTypes.purchaseBurger(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

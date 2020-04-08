@@ -4,12 +4,17 @@ import * as actions from '../actions';
 import axiosConfig from '../../utils/axios-orders';
 
 const axios = axiosConfig();
+const token = localStorage.getItem('token');
+const userId = localStorage.getItem('userId');
 
 export function* purchaseBurger({ payload }) {
-  const { token, ...restparams } = payload;
+  const params = {
+    ...payload,
+    userId,
+  };
   try {
-    const response = axios.post(`/orders.json?auth=${token}`, restparams);
-    yield put(actions.purchaseBurgerSuccess(response.data, restparams));
+    const response = axios.post(`/orders.json?auth=${token}`, params);
+    yield put(actions.purchaseBurgerSuccess(response.data, params));
   } catch (error) {
     yield put(actions.purchaseBurgerFailed(error));
   }
