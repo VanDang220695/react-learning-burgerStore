@@ -29,4 +29,11 @@ export {
   authSignup,
 } from './auth';
 
-export { getProfile, getProfileStart, getProfileSuccess, getProfileFailed } from './profile';
+export {
+  getProfile,
+  getProfileStart,
+  getProfileSuccess,
+  getProfileFailed,
+  updateProfile,
+  setErrorProfileUpdate,
+} from './profile';

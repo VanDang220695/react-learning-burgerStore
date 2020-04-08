@@ -1,7 +1,6 @@
 import { put, delay, call } from 'redux-saga/effects';
 
 import configAxios from '../../utils/axios-orders';
-import { updateProfile } from '../../services/profiles';
 
 import * as actions from '../actions';
 
@@ -13,6 +12,7 @@ export function* logout() {
   yield call([localStorage, 'removeItem'], 'token');
   yield call([localStorage, 'removeItem'], 'expirationDate');
   yield call([localStorage, 'removeItem'], 'userId');
+  yield call([localStorage, 'removeItem'], 'email');
   yield put(actions.logoutSucceed());
 }
 
@@ -45,10 +45,6 @@ export function* authUser({ payload }) {
         requestType: 'VERIFY_EMAIL',
         idToken,
       });
-      yield call(updateProfile, {
-        email,
-        userId: localId,
-      });
       yield put(actions.authSignup());
       return;
     }
@@ -68,7 +64,8 @@ export function* authUser({ payload }) {
     yield localStorage.setItem('token', idToken);
     yield localStorage.setItem('expirationDate', expirationDate);
     yield localStorage.setItem('userId', localId);
-    yield put(actions.authSuccess(idToken, localId));
+    yield localStorage.setItem('email', email);
+    yield put(actions.authSuccess(idToken, localId, email));
     yield put(actions.checkAuthTimeout(Number(expiresIn)));
   } catch (error) {
     yield put(actions.authFailed(error.response.data.error));
@@ -77,13 +74,14 @@ export function* authUser({ payload }) {
 
 export function* authCheckState() {
   const token = yield localStorage.getItem('token');
+  const email = yield localStorage.getItem('email');
   if (!token) {
     yield put(actions.logout());
   } else {
     const expirationDate = new Date(localStorage.getItem('expirationDate'));
     if (expirationDate > new Date()) {
       const userId = localStorage.getItem('userId');
-      yield put(actions.authSuccess(token, userId));
+      yield put(actions.authSuccess(token, userId, email));
       yield put(actions.checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
     } else {
       yield put(actions.logout());

@@ -7,6 +7,7 @@ const initialState = {
   },
   loading: false,
   error: null,
+  isUpdateProfileSuccess: false,
 };
 
 const getProfileStart = (state) => {
@@ -22,10 +23,17 @@ const getProfileSuccess = (state, { payload }) => {
   });
 };
 
-const getProfileFailed = (state, action) => {
+const getProfileFailed = (state, { error }) => {
   return updateObject(state, {
     loading: false,
-    error: action.error,
+    error,
+  });
+};
+
+const setErrorProfileStatus = (state, { payload }) => {
+  return updateObject(state, {
+    loading: false,
+    isUpdateProfileSuccess: payload,
   });
 };
 
@@ -37,6 +45,8 @@ const reducer = (state = initialState, action) => {
       return getProfileSuccess(state, action);
     case actionTypes.PROFILE_GET_DATA_FAILDED:
       return getProfileFailed(state, action);
+    case actionTypes.PROFILE_UPDATE_DATA_STATUS:
+      return setErrorProfileStatus(state, action);
     default:
       return state;
   }

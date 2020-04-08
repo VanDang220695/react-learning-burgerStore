@@ -13,5 +13,5 @@ export const getProfileUser = () => {
 };
 
 export const updateProfile = (params) => {
-  return axios.post(`/profiles.json?auth=${token}`, params);
+  return axios.post(`/profiles.json?auth=${token}`, { ...params, userId });
 };

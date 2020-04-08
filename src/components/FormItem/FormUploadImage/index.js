@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Field } from 'formik';
 import { Upload, Form, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
@@ -18,9 +18,16 @@ function beforeUpload(file) {
 }
 
 const FormUploadImage = (props) => {
-  const { disabled = false, name, required, label, setFieldValue } = props;
+  const { disabled = false, name, required, label, setFieldValue, value } = props;
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setImageUrl(value);
+    }
+  }, [value]);
+
   const uploadButton = (
     <div>
       {loading ? (

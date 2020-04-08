@@ -21,7 +21,21 @@ export const getProfileSuccess = (payload) => {
 
 export const getProfileFailed = (payload) => {
   return {
-    type: actionTypes.PURCHASE_BURGER_FAILED,
+    type: actionTypes.PROFILE_GET_DATA_FAILDED,
+    payload,
+  };
+};
+
+export const updateProfile = (payload) => {
+  return {
+    type: actionTypes.PROFILE_UPDATE_DATA,
+    payload,
+  };
+};
+
+export const setErrorProfileUpdate = (payload) => {
+  return {
+    type: actionTypes.PROFILE_UPDATE_DATA_STATUS,
     payload,
   };
 };

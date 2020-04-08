@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Row, Col, Avatar, Form } from 'antd';
+import { Button, Row, Col, Avatar, Form, Skeleton } from 'antd';
 import { connect } from 'react-redux';
 import { UserOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 import {
   FormInput,
@@ -26,94 +27,91 @@ const formItemLayout = {
     sm: { span: 19 },
   },
 };
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 24,
+      offset: 5,
+    },
+  },
+};
 
 const ProfileUser = (props) => {
   const { getFullProfile, profile } = props;
-  const [email, setEmail] = useState('');
-  const [isEdit, setIsEdit] = useState(true);
-
-  console.log(props);
 
   useEffect(() => {
     getFullProfile();
   }, [getFullProfile]);
 
-  useEffect(() => {
-    const { email } = profile;
-    setEmail(email);
-  }, [profile]);
-
-  const changeStatusEdit = (value) => {
-    setIsEdit(value);
-  };
-
-  const emailShow = email.split('@')[0].toUpperCase() || 'you';
+  const { fullName } = profile;
 
   return (
     <div className={classes.Form__Container}>
       <p className={classes.Title__profile}>
-        Welcome <span style={{ fontWeight: '500', color: 'blue' }}>{emailShow}</span> to my Burger
-        project.
+        Welcome <span style={{ fontWeight: '500', color: 'blue' }}>{fullName || 'you'}</span> to my
+        Burger project.
       </p>
-      <Row gutter={32} style={{ marginTop: '20px' }}>
-        <Col span={16}>
-          <Form
-            id='formProfile'
-            onFinish={props.handleSubmit}
-            layout='horizontal'
-            {...formItemLayout}
-          >
-            <FormInput name='fullName' required label='Full name' />
-            <FormInput name='email' label='Email' />
-            <FormInput name='address' required label='Address' />
-            <FormDatePicker
-              name='dob'
-              required
-              label='Day of birth'
-              onChange={props.setFieldValue}
-            />
-            <FormTextArea name='note' label='Note' />
-            <FormUploadImage name='imageUrl' label='Photo' setFieldValue={props.setFieldValue} />
-            <Button
-              form='formProfile'
-              type='primary'
-              htmlType='submit'
-              block
-              style={{ marginTop: '20px' }}
+      <Skeleton loading={props.loading}>
+        <Row gutter={32} style={{ marginTop: '20px' }}>
+          <Col span={16}>
+            <Form
+              id='formProfile'
+              onFinish={props.handleSubmit}
+              layout='horizontal'
+              {...formItemLayout}
             >
-              Submit
-            </Button>
-          </Form>
-        </Col>
-        <Col span={8}>
-          <div className={classes.Avatar__Container}>
-            <div>
-              <Avatar
-                src={props.values.imageUrl}
-                className={classes.Avatar}
-                size={128}
-                shape='circle'
-                icon={<UserOutlined />}
+              <FormInput name='fullName' required label='Full name' />
+              <FormInput name='email' label='Email' disabled={true} />
+              <FormInput name='address' required label='Address' />
+              <FormDatePicker
+                name='dob'
+                required
+                label='Day of birth'
+                value={props.values.dob}
+                onChange={props.setFieldValue}
               />
-            </div>
-            <div className={classes.Group__Button__Container}>
-              <div className={classes.Group__Button}>
-                <Button className={classes.Button} onClick={() => changeStatusEdit(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  type='primary'
-                  className={classes.Button}
-                  style={{ marginLeft: '16px' }}
-                  onClick={() => changeStatusEdit(true)}
-                >
-                  Edit
-                </Button>
+              <FormTextArea name='note' label='Note' />
+              <FormUploadImage
+                value={props.values.imageUrl}
+                name='imageUrl'
+                label='Photo'
+                setFieldValue={props.setFieldValue}
+              />
+              <Form.Item {...tailFormItemLayout}>
+                <Row justify='space-between' gutter={64}>
+                  <Col span={12}>
+                    <Button block onClick={() => props.resetForm()}>
+                      Reset
+                    </Button>
+                  </Col>
+                  <Col span={12}>
+                    <Button form='formProfile' type='primary' block htmlType='submit'>
+                      Submit
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+            </Form>
+          </Col>
+          <Col span={8}>
+            <div className={classes.Avatar__Container}>
+              <div>
+                <Avatar
+                  src={props.values.imageUrl}
+                  className={classes.Avatar}
+                  size={128}
+                  shape='square'
+                  icon={<UserOutlined />}
+                />
               </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </Skeleton>
     </div>
   );
 };
@@ -121,19 +119,23 @@ const ProfileUser = (props) => {
 const mapStateToProps = (state) => {
   return {
     idToken: state.auth.token,
+    email: state.auth.email,
     profile: state.profile.profile,
+    loading: state.profile.loading,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getFullProfile: () => dispatch(actions.getProfile()),
+    updateProfile: (payload) => dispatch(actions.updateProfile(payload)),
   };
 };
 
 const validationSchema = Yup.object({
   fullName: Yup.string().required('Full name must be required'),
   address: Yup.string().required('Address must be required'),
+  dob: Yup.string().required('Day of birth must be required'),
 });
 
 const ProfileForm = withFormik({
@@ -141,20 +143,24 @@ const ProfileForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: (props) => {
     const {
-      profile: { fullName, email, address, note, imageUrl, dob },
+      profile: { fullName, address, note, imageUrl, dob },
     } = props;
     return {
       fullName: fullName || '',
-      email: email || '',
+      email: props.email,
       address: address || '',
       note: note || '',
       imageUrl: imageUrl || '',
-      dob: dob || '',
+      dob: (dob && moment(dob)) || '',
     };
   },
   validationSchema: () => validationSchema,
-  handleSubmit: (props) => {
-    console.log('props', props);
+  handleSubmit: async (values, formigBag) => {
+    const { props } = formigBag;
+    const { dob, ...restparams } = values;
+    const { getFullProfile, updateProfile } = props;
+    await updateProfile({ dob: moment(dob).toString(), ...restparams });
+    await getFullProfile();
   },
 })(ProfileUser);
 

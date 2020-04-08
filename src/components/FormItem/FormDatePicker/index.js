@@ -3,7 +3,7 @@ import { Field } from 'formik';
 import { DatePicker, Form } from 'antd';
 
 const FormDatePicker = (props) => {
-  const { disabled = false, name, required, label, placeholder = '', onChange } = props;
+  const { value, disabled = false, name, required, label, placeholder = '', onChange } = props;
 
   return (
     <Field name={name}>
@@ -21,8 +21,9 @@ const FormDatePicker = (props) => {
               format='DD-MM-YYYY'
               placeholder={placeholder}
               name={name}
+              value={value}
               disabled={disabled}
-              onChange={(value) => onChange(name, value.toString())}
+              onChange={(value) => onChange(name, value)}
             />
           </Form.Item>
         );
