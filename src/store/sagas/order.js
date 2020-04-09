@@ -15,6 +15,7 @@ export function* purchaseBurger({ payload }) {
   };
   try {
     const response = yield call(purchaseBurgerService, params);
+    yield put(actions.initIngredients());
     yield put(actions.purchaseBurgerSuccess(response.data, params));
   } catch (error) {
     yield put(actions.purchaseBurgerFailed(error));

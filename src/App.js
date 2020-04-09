@@ -35,10 +35,10 @@ const token = localStorage.getItem('token');
 const App = (props) => {
   const { onTryAutoSignup, onGetProfileUser, onInitIngredient } = props;
   useEffect(() => {
+    onInitIngredient();
     if (token) {
       onTryAutoSignup();
       onGetProfileUser();
-      onInitIngredient();
     }
   }, [onTryAutoSignup, onGetProfileUser, onInitIngredient]);
   let routes;

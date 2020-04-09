@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal } from 'antd';
 
@@ -32,15 +32,10 @@ export const BurgerBuilder = (props) => {
 
   const onIngredientAdded = (ingName) => dispatch(actions.addIngredient(ingName));
   const onIngredientRemoved = (ingName) => dispatch(actions.removeIngredient(ingName));
-  const onInitIngredient = useCallback(() => dispatch(actions.initIngredients()), [dispatch]);
   const onInitPurchase = () => dispatch(actions.purchaseInit());
   const onSetAuthRedirectPath = (path) => dispatch(actions.setAuthRedirectPath(path));
 
   const { history } = props;
-
-  useEffect(() => {
-    onInitIngredient();
-  }, [onInitIngredient]);
 
   const updatePurchaseState = (ingredients) => {
     const sum = Object.keys(ingredients)
