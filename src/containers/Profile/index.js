@@ -147,11 +147,11 @@ const ProfileForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: (props) => {
     const {
-      profile: { fullName, address, note, imageUrl, dob },
+      profile: { fullName, address, note, imageUrl, dob, email },
     } = props;
     return {
       fullName: fullName || '',
-      email: props.email,
+      email,
       address: address || '',
       note: note || '',
       imageUrl: imageUrl || '',

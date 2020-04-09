@@ -1,6 +1,6 @@
 {
-  "name": "test",
-  "version": "1.5.0",
+  "name": "burger",
+  "version": "1.5.1",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.0.5",
