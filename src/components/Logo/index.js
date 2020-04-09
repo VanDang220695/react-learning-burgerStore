@@ -6,7 +6,7 @@ import classes from './styles.module.css';
 const logo = () => (
   <div className={classes.Logo}>
     <img src={burgerLogo} alt='' />
-    <span style={{ marginLeft: '25px', color: 'white' }}>Version 1.02</span>
+    <span style={{ marginLeft: '25px', color: 'white' }}>Version 1.03</span>
   </div>
 );
 

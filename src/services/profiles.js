@@ -4,13 +4,11 @@ const axios = configAxios();
 
 // Params: {idToken: ''}
 
-const token = localStorage.getItem('token');
-const userId = localStorage.getItem('userId');
-
-export const getProfileUser = () => {
+export const getProfileUser = ({ token, userId }) => {
   return axios.get(`/profiles/${userId}.json?auth=${token}`);
 };
 
 export const updateProfile = (params) => {
-  return axios.put(`/profiles/${userId}.json?auth=${token}`, { ...params, userId });
+  const { token, userId, ...restparams } = params;
+  return axios.put(`/profiles/${userId}.json?auth=${token}`, { ...restparams });
 };

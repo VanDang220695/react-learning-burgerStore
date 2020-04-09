@@ -1,12 +1,12 @@
 import { put, delay, call } from 'redux-saga/effects';
 
-import configAxios from '../../utils/axios-orders';
-
+import {
+  signupService,
+  signinService,
+  sendEmailConfirmService,
+  getInforUserService,
+} from '../../services/auth';
 import * as actions from '../actions';
-
-const axios = configAxios(true);
-
-const API_KEY = 'AIzaSyC1JYOQTBx7_t3ozgiT8ILbMEHQRL8Qgzw';
 
 export function* logout() {
   yield call([localStorage, 'removeItem'], 'token');
@@ -29,26 +29,25 @@ export function* authUser({ payload }) {
     password,
     returnSecureToken: true,
   };
-  let url = `accounts:signUp?key=${API_KEY}`;
-  if (!isSignUp) {
-    url = `accounts:signInWithPassword?key=${API_KEY}`;
-  }
+  let action = isSignUp ? signupService : signinService;
+
   let response;
   try {
-    response = yield axios.post(url, authData);
+    response = yield call(action, authData);
     const { idToken, localId, expiresIn } = response.data;
     const expirationDate = yield new Date(new Date().getTime() + Number(expiresIn) * 1000);
 
     // Verify email
     if (isSignUp) {
-      yield axios.post(`accounts:sendOobCode?key=${API_KEY}`, {
-        requestType: 'VERIFY_EMAIL',
-        idToken,
-      });
+      yield call(sendEmailConfirmService, { requestType: 'VERIFY_EMAIL', idToken });
       yield put(actions.authSignup());
       return;
     }
-    const { data: userInformation } = yield axios.post(`accounts:update?key=${API_KEY}`, {
+    yield call(getInforUserService, {
+      ...authData,
+      idToken,
+    });
+    const { data: userInformation } = yield call(getInforUserService, {
       ...authData,
       idToken,
     });
