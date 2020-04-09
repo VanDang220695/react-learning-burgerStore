@@ -1,4 +1,6 @@
 import { put, delay, call } from 'redux-saga/effects';
+import { setCookie, deleteAllCookies, getCookie } from '../../utils/cookies';
+import { COOKIE_EMAIL, COOKIE_TOKEN, COOKIE_USERID, EXPIRATION_DATE } from '../../constants/index';
 
 import {
   signupService,
@@ -9,10 +11,9 @@ import {
 import * as actions from '../actions';
 
 export function* logout() {
-  yield call([localStorage, 'removeItem'], 'token');
-  yield call([localStorage, 'removeItem'], 'expirationDate');
-  yield call([localStorage, 'removeItem'], 'userId');
-  yield call([localStorage, 'removeItem'], 'email');
+  yield call([localStorage, 'clear']);
+
+  deleteAllCookies();
   yield put(actions.logoutSucceed());
 }
 
@@ -43,10 +44,6 @@ export function* authUser({ payload }) {
       yield put(actions.authSignup());
       return;
     }
-    yield call(getInforUserService, {
-      ...authData,
-      idToken,
-    });
     const { data: userInformation } = yield call(getInforUserService, {
       ...authData,
       idToken,
@@ -60,11 +57,11 @@ export function* authUser({ payload }) {
       );
       return;
     }
-    yield localStorage.setItem('token', idToken);
-    yield localStorage.setItem('expirationDate', expirationDate);
-    yield localStorage.setItem('userId', localId);
-    yield localStorage.setItem('email', email);
-    yield put(actions.authSuccess(idToken, localId, email));
+    setCookie(COOKIE_TOKEN, idToken, 3600);
+    setCookie(COOKIE_USERID, localId, 3600);
+    setCookie(COOKIE_EMAIL, email, 3600);
+    yield localStorage.setItem(EXPIRATION_DATE, expirationDate);
+    yield put(actions.authSuccess({ token: idToken, userId: localId }));
     yield put(actions.checkAuthTimeout(Number(expiresIn)));
   } catch (error) {
     yield put(actions.authFailed(error.response.data.error));
@@ -72,15 +69,14 @@ export function* authUser({ payload }) {
 }
 
 export function* authCheckState() {
-  const token = yield localStorage.getItem('token');
-  const email = yield localStorage.getItem('email');
+  const token = yield getCookie(COOKIE_TOKEN);
+  const userId = yield getCookie(COOKIE_USERID);
   if (!token) {
     yield put(actions.logout());
   } else {
-    const expirationDate = new Date(localStorage.getItem('expirationDate'));
+    const expirationDate = new Date(localStorage.getItem(EXPIRATION_DATE));
     if (expirationDate > new Date()) {
-      const userId = localStorage.getItem('userId');
-      yield put(actions.authSuccess(token, userId, email));
+      yield put(actions.authSuccess({ token, userId }));
       yield put(actions.checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
     } else {
       yield put(actions.logout());

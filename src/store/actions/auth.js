@@ -6,12 +6,10 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = (token, userId, email) => {
+export const authSuccess = (payload) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
-    idToken: token,
-    userId,
-    email,
+    payload,
   };
 };
 

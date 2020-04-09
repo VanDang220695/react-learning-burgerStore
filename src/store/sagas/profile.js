@@ -2,13 +2,14 @@ import { call, put } from 'redux-saga/effects';
 
 import * as actions from '../actions';
 import { getProfileUser, updateProfile } from '../../services/profiles';
+import { getCookie } from '../../utils/cookies';
+import { COOKIE_USERID, COOKIE_TOKEN } from '../../constants';
 
 export function* getProfile() {
   try {
     yield put(actions.getProfileStart());
-
-    const token = yield localStorage.getItem('token');
-    const userId = yield localStorage.getItem('userId');
+    const token = yield getCookie(COOKIE_TOKEN);
+    const userId = yield getCookie(COOKIE_USERID);
     const response = yield call(getProfileUser, {
       token,
       userId,
@@ -26,8 +27,8 @@ export function* getProfile() {
 
 export function* updateProfileUser({ payload }) {
   try {
-    const token = yield localStorage.getItem('token');
-    const userId = yield localStorage.getItem('userId');
+    const token = yield getCookie(COOKIE_TOKEN);
+    const userId = yield getCookie(COOKIE_USERID);
     yield put(actions.getProfileStart());
     yield call(updateProfile, { payload, token, userId });
     yield put(actions.getProfile({ token, userId }));
