@@ -1,12 +1,12 @@
 import { put, delay, call } from 'redux-saga/effects';
 import { setCookie, deleteAllCookies, getCookie } from '../../utils/cookies';
-import { COOKIE_EMAIL, COOKIE_TOKEN, COOKIE_USERID, EXPIRATION_DATE } from '../../constants/index';
+import { COOKIE_EMAIL, COOKIE_TOKEN, COOKIE_USER_ID, EXPIRATION_DATE } from '../../constants/index';
 
 import {
   signupService,
   signinService,
   sendEmailConfirmService,
-  getInforUserService,
+  getInfoUserService,
 } from '../../services/auth';
 import * as actions from '../actions';
 
@@ -24,13 +24,13 @@ export function* checkAuthTimeout(payload) {
 
 export function* authUser({ payload }) {
   yield put(actions.authStart());
-  const { email, password, isSignUp } = payload;
+  const { email, password, isSignup } = payload;
   const authData = {
     email,
     password,
     returnSecureToken: true,
   };
-  let action = isSignUp ? signupService : signinService;
+  let action = isSignup ? signupService : signinService;
 
   let response;
   try {
@@ -39,12 +39,12 @@ export function* authUser({ payload }) {
     const expirationDate = yield new Date(new Date().getTime() + Number(expiresIn) * 1000);
 
     // Verify email
-    if (isSignUp) {
+    if (isSignup) {
       yield call(sendEmailConfirmService, { requestType: 'VERIFY_EMAIL', idToken });
       yield put(actions.authSignup());
       return;
     }
-    const { data: userInformation } = yield call(getInforUserService, {
+    const { data: userInformation } = yield call(getInfoUserService, {
       ...authData,
       idToken,
     });
@@ -58,7 +58,7 @@ export function* authUser({ payload }) {
       return;
     }
     setCookie(COOKIE_TOKEN, idToken, 3600);
-    setCookie(COOKIE_USERID, localId, 3600);
+    setCookie(COOKIE_USER_ID, localId, 3600);
     setCookie(COOKIE_EMAIL, email, 3600);
     yield localStorage.setItem(EXPIRATION_DATE, expirationDate);
     yield put(actions.authSuccess({ token: idToken, userId: localId }));
@@ -70,7 +70,7 @@ export function* authUser({ payload }) {
 
 export function* authCheckState() {
   const token = yield getCookie(COOKIE_TOKEN);
-  const userId = yield getCookie(COOKIE_USERID);
+  const userId = yield getCookie(COOKIE_USER_ID);
   if (!token) {
     yield put(actions.logout());
   } else {

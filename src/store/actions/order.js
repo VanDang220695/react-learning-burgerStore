@@ -8,7 +8,7 @@ export const purchaseBurgerSuccess = (id, orderData) => {
   };
 };
 
-export const purchaseBurgerFailed = error => {
+export const purchaseBurgerFailed = (error) => {
   return {
     type: actionTypes.PURCHASE_BURGER_FAILED,
     error,
@@ -21,7 +21,7 @@ export const purchaseBurgerStart = () => {
   };
 };
 
-export const purchaseBurger = payload => {
+export const purchaseBurger = (payload) => {
   return {
     type: actionTypes.PURCHASE_BURGER,
     payload,
@@ -34,14 +34,14 @@ export const purchaseInit = () => {
   };
 };
 
-export const fetchOrderSuccess = orders => {
+export const fetchOrderSuccess = (orders) => {
   return {
     type: actionTypes.FETCH_ORDER_SUCCESS,
     orders,
   };
 };
 
-export const fetchOrderfail = errors => {
+export const fetchOrderFail = (errors) => {
   return {
     type: actionTypes.FETCH_ORDER_FAILED,
     errors,
@@ -54,7 +54,7 @@ export const fetchOrderStart = () => {
   };
 };
 
-export const fetchOrders = payload => {
+export const fetchOrders = (payload) => {
   return {
     type: actionTypes.FETCH_ORDER,
     payload,

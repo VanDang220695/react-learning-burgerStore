@@ -3,14 +3,14 @@ import { call, put } from 'redux-saga/effects';
 import * as actions from '../actions';
 import { getProfileUser, updateProfile } from '../../services/profiles';
 import { getCookie } from '../../utils/cookies';
-import { COOKIE_USERID, COOKIE_TOKEN, COOKIE_EMAIL } from '../../constants';
+import { COOKIE_USER_ID, COOKIE_TOKEN, COOKIE_EMAIL } from '../../constants';
 
 export function* getProfile() {
   try {
     const email = getCookie(COOKIE_EMAIL);
     yield put(actions.getProfileStart());
     const token = yield getCookie(COOKIE_TOKEN);
-    const userId = yield getCookie(COOKIE_USERID);
+    const userId = yield getCookie(COOKIE_USER_ID);
     const response = yield call(getProfileUser, {
       token,
       userId,
@@ -32,7 +32,7 @@ export function* getProfile() {
 export function* updateProfileUser({ payload }) {
   try {
     const token = yield getCookie(COOKIE_TOKEN);
-    const userId = yield getCookie(COOKIE_USERID);
+    const userId = yield getCookie(COOKIE_USER_ID);
     yield put(actions.getProfileStart());
     yield call(updateProfile, { ...payload, token, userId });
     yield put(actions.getProfile({ token, userId }));

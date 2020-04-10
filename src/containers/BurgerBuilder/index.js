@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Modal } from 'antd';
 
 import configAxios from '../../utils/axios-orders';
-import AuxContainer from '../../hoc/AuxContainer';
 import Burger from '../../components/Burger';
 import BurgerControls from '../../components/Burger/BuildControls';
 import OrderSummary from '../../components/Burger/OrderSummary';
@@ -73,7 +72,7 @@ export const BurgerBuilder = (props) => {
 
   if (ings) {
     burger = (
-      <AuxContainer>
+      <React.Fragment>
         <div
           style={{
             display: 'flex',
@@ -94,12 +93,12 @@ export const BurgerBuilder = (props) => {
             />
           </div>
         </div>
-      </AuxContainer>
+      </React.Fragment>
     );
     orderSummary = <OrderSummary price={totalPrice.toFixed(2)} ingredients={ings} />;
   }
   return (
-    <AuxContainer>
+    <React.Fragment>
       <Modal
         closable={false}
         onOk={() => purchaseContinueHandler()}
@@ -112,7 +111,7 @@ export const BurgerBuilder = (props) => {
         {orderSummary}
       </Modal>
       <div>{burger}</div>
-    </AuxContainer>
+    </React.Fragment>
   );
 };
 

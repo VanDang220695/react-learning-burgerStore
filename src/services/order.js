@@ -3,8 +3,8 @@ import configAxios from '../utils/axios-orders';
 const axios = configAxios();
 
 export const purchaseBurgerService = (params) => {
-  const { token, ...restparams } = params;
-  return axios.post(`/orders.json?auth=${token}`, restparams);
+  const { token, ...restParams } = params;
+  return axios.post(`/orders.json?auth=${token}`, restParams);
 };
 
 export const fetchOrdersService = (params) => {

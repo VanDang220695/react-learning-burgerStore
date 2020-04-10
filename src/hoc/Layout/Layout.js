@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import AuxContainer from '../AuxContainer';
 import classes from './styles.module.css';
 
 import Toolbar from '../../components/Navigation/ToolBar';
@@ -18,7 +17,7 @@ const Layout = (props) => {
   };
 
   return (
-    <AuxContainer>
+    <React.Fragment>
       <div className={classes.Container}>
         <Toolbar toggleDrawer={sideDrawerToggleHandler} isAuth={props.isAuthenticated} />
         <SideDrawer
@@ -28,7 +27,7 @@ const Layout = (props) => {
         />
         <main className={classes.Content}>{props.children}</main>
       </div>
-    </AuxContainer>
+    </React.Fragment>
   );
 };
 

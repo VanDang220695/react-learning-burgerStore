@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
-import { withFormik } from 'formik';
-import * as Yup from 'yup';
 import { Button, Row, Col, Avatar, Form, Skeleton } from 'antd';
-import { connect } from 'react-redux';
 import { UserOutlined } from '@ant-design/icons';
-import moment from 'moment';
 
 import {
   FormInput,
@@ -13,9 +9,9 @@ import {
   FormUploadImage,
 } from '../../components/FormItem';
 
-import * as actions from '../../store/actions';
-
 import classes from './styles.module.css';
+
+import enhanceProfile from './enhanceProfile';
 
 const formItemLayout = {
   labelCol: {
@@ -120,56 +116,4 @@ const ProfileUser = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    idToken: state.auth.token,
-    email: state.auth.email,
-    profile: state.profile.profile,
-    loading: state.profile.loading,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getFullProfile: () => dispatch(actions.getProfile()),
-    updateProfile: (payload) => dispatch(actions.updateProfile(payload)),
-  };
-};
-
-const validationSchema = Yup.object({
-  fullName: Yup.string().required('Full name must be required'),
-  address: Yup.string().required('Address must be required'),
-  dob: Yup.string().required('Day of birth must be required'),
-});
-
-const ProfileForm = withFormik({
-  displayName: 'formProfile',
-  enableReinitialize: true,
-  mapPropsToValues: (props) => {
-    const {
-      profile: { fullName, address, note, imageUrl, dob, email },
-    } = props;
-    return {
-      fullName: fullName || '',
-      email,
-      address: address || '',
-      note: note || '',
-      imageUrl: imageUrl || '',
-      dob: (dob && moment(dob)) || '',
-    };
-  },
-  validationSchema: () => validationSchema,
-  handleSubmit: async (values, formikBag) => {
-    const { props } = formikBag;
-    const { dob, ...restParams } = values;
-    const { updateProfile } = props;
-    await updateProfile({
-      dob: moment(dob).toISOString(),
-      updatedTime: moment().toISOString(),
-      ...restParams,
-    });
-    props.history.goBack();
-  },
-})(ProfileUser);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileForm);
+export default enhanceProfile(ProfileUser);

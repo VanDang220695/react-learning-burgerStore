@@ -3,8 +3,6 @@ import { Card } from 'antd';
 
 import burgerImg from '../../../assets/images/burgerImg.png';
 
-import AuxContainer from '../../../hoc/AuxContainer';
-
 const orderSummary = (props) => {
   const ingredientSummary = Object.keys(props.ingredients).map((igKey) => {
     return (
@@ -14,7 +12,7 @@ const orderSummary = (props) => {
     );
   });
   return (
-    <AuxContainer>
+    <React.Fragment>
       <Card
         title='Your order'
         hoverable
@@ -38,7 +36,7 @@ const orderSummary = (props) => {
         </p>
         <p>Continue to Checkout?</p>
       </Card>
-    </AuxContainer>
+    </React.Fragment>
   );
 };
 

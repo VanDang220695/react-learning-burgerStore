@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Modal } from 'antd';
-import AuxContainer from '../AuxContainer';
 import useHttpErrorHandler from '../../hooks/http-error-handler';
 
 const withErrorHandler = (WrappedComponent, axios) => {
@@ -10,12 +9,12 @@ const withErrorHandler = (WrappedComponent, axios) => {
     const [error, clearError] = useHttpErrorHandler(axios);
 
     return (
-      <AuxContainer>
+      <React.Fragment>
         <Modal visible={error} onCancel={clearError}>
           {error && error.message}
         </Modal>
         <WrappedComponent {...props} />
-      </AuxContainer>
+      </React.Fragment>
     );
   };
 };

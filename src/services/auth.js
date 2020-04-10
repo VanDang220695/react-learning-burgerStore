@@ -1,6 +1,6 @@
 import configAxios from '../utils/axios-orders';
+import { API_KEY } from '../constants';
 
-const API_KEY = 'AIzaSyC1JYOQTBx7_t3ozgiT8ILbMEHQRL8Qgzw';
 const axios = configAxios(true);
 
 export const signupService = (params) => {
@@ -14,6 +14,6 @@ export const signinService = (params) => {
 export const sendEmailConfirmService = (params) => {
   return axios.post(`accounts:sendOobCode?key=${API_KEY}`, params);
 };
-export const getInforUserService = (params) => {
+export const getInfoUserService = (params) => {
   return axios.post(`accounts:update?key=${API_KEY}`, params);
 };
