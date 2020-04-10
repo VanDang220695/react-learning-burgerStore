@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { List, Row, Col, Button } from 'antd';
+import { List, Row, Col, Button, Modal } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 
 import * as actionTypes from '../../store/actions';
@@ -20,7 +20,7 @@ const Checkout = (props) => {
     return () => onInitPurchase();
   }, [onInitPurchase]);
 
-  if (!props.ings || props.purchased) {
+  if (!props.ings) {
     props.history.push('/');
   }
 
@@ -49,11 +49,21 @@ const Checkout = (props) => {
   });
 
   const onOrderHandler = () => {
+    if (!props.address) {
+      return Modal.warning({
+        title: 'Please update profile first',
+        onOk: () => {
+          props.history.push('/profile');
+          return;
+        },
+      });
+    }
     props.onOrderBurger({
       ingredients: ings,
       price: totalPrice,
       createAt: new Date().toISOString(),
     });
+    props.onInitIngredient();
     props.history.push('/');
   };
 
@@ -106,7 +116,6 @@ const mapStateToProps = (state) => {
   return {
     ings: state.burgerBuilder.ingredients,
     totalPrice: state.burgerBuilder.totalPrice,
-    purchased: state.order.purchased,
     address: state.profile.profile.address,
   };
 };
@@ -114,6 +123,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   onInitPurchase: () => dispatch(actionTypes.purchaseInit()),
   onOrderBurger: (payload) => dispatch(actionTypes.purchaseBurger(payload)),
+  onInitIngredient: () => dispatch(actionTypes.initIngredients()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

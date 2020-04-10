@@ -30,6 +30,10 @@ const ProfileUser = React.lazy(() => {
   return import('./containers/Profile');
 });
 
+const NotFound = React.lazy(() => {
+  return import('./containers/NotFound');
+});
+
 const token = localStorage.getItem('token');
 
 const App = (props) => {
@@ -59,6 +63,7 @@ const App = (props) => {
       <Switch>
         <Route path='/auth' render={(props) => <Auth {...props} />} />
         <Route path='/' exact component={BurgerBuilder} />
+        <Route component={NotFound} />
       </Switch>
     );
   }

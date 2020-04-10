@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 
 import BuildControl from './BuildControl';
 import classes from './styles.module.css';
@@ -24,9 +25,15 @@ const buildControls = (props) => (
         remove={() => props.ingredientRemoved(ctrl.type)}
       />
     ))}
-    <button className={classes.OrderButton} disabled={!props.purchasable} onClick={props.orderd}>
+    <Button
+      className={classes.OrderButton}
+      disabled={!props.purchasable}
+      onClick={props.orderd}
+      type='primary'
+      ghost
+    >
       {props.isAuth ? 'ORDER NOW' : 'SIGN IN TO ORDER'}
-    </button>
+    </Button>
   </div>
 );
 

@@ -1,16 +1,17 @@
 import React from 'react';
+import { Button } from 'antd';
 
 import classes from './styles.module.css';
 
 const buildControl = (props) => (
   <div className={classes.BuildControl}>
     <div className={classes.Label}>{props.label}</div>
-    <button className={classes.Less} onClick={props.remove} disabled={props.disabled}>
+    <Button onClick={props.remove} disabled={props.disabled}>
       Less
-    </button>
-    <button className={classes.More} onClick={props.added}>
+    </Button>
+    <Button type='primary' onClick={props.added}>
       More
-    </button>
+    </Button>
   </div>
 );
 

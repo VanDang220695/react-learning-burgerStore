@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Modal from '../../components/UI/Modal';
+import { Modal } from 'antd';
 import AuxContainer from '../AuxContainer';
 import useHttpErrorHandler from '../../hooks/http-error-handler';
 
@@ -11,7 +11,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
     return (
       <AuxContainer>
-        <Modal show={error} modalClosed={clearError}>
+        <Modal visible={error} onCancel={clearError}>
           {error && error.message}
         </Modal>
         <WrappedComponent {...props} />

@@ -163,7 +163,11 @@ const ProfileForm = withFormik({
     const { props } = formigBag;
     const { dob, ...restparams } = values;
     const { updateProfile } = props;
-    await updateProfile({ dob: moment(dob).toISOString(), ...restparams });
+    await updateProfile({
+      dob: moment(dob).toISOString(),
+      updatedTime: moment().toISOString(),
+      ...restparams,
+    });
     props.history.goBack();
   },
 })(ProfileUser);

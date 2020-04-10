@@ -20,9 +20,6 @@ export const BurgerBuilder = (props) => {
   const ings = useSelector((state) => {
     return state.burgerBuilder.ingredients;
   });
-  const profile = useSelector((state) => {
-    return state.profile.profile;
-  });
   const totalPrice = useSelector((state) => {
     return state.burgerBuilder.totalPrice;
   });
@@ -32,7 +29,6 @@ export const BurgerBuilder = (props) => {
 
   const onIngredientAdded = (ingName) => dispatch(actions.addIngredient(ingName));
   const onIngredientRemoved = (ingName) => dispatch(actions.removeIngredient(ingName));
-  const onInitPurchase = () => dispatch(actions.purchaseInit());
   const onSetAuthRedirectPath = (path) => dispatch(actions.setAuthRedirectPath(path));
 
   const { history } = props;
@@ -62,17 +58,6 @@ export const BurgerBuilder = (props) => {
   };
 
   const purchaseContinueHandler = () => {
-    onInitPurchase();
-
-    if (!profile.address) {
-      return Modal.warning({
-        title: 'Please update profile first',
-        onOk: () => {
-          props.history.push('/profile');
-          return;
-        },
-      });
-    }
     history.push('/checkout');
   };
 
