@@ -3,21 +3,20 @@ import { Field } from 'formik';
 import { Input, Form } from 'antd';
 
 const FormInput = (props) => {
-  const { disabled = false, name, required, label, placeholder = '' } = props;
+  const { name, required, label, type = 'tex', ...restParams } = props;
 
   return (
     <Field name={name}>
       {({ meta, field }) => {
+        const restProps = { ...field, ...restParams };
         return (
           <Form.Item
-            colon={false}
             help={(meta.touched && meta.error) || null}
             validateStatus={meta.touched && meta.error ? 'error' : 'validating'}
             label={label}
-            placeholder={placeholder}
             required={required}
           >
-            <Input name={name} disabled={disabled} {...field} />
+            {type === 'password' ? <Input.Password {...restProps} /> : <Input {...restProps} />}
           </Form.Item>
         );
       }}

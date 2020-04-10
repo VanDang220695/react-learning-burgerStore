@@ -159,14 +159,14 @@ const ProfileForm = withFormik({
     };
   },
   validationSchema: () => validationSchema,
-  handleSubmit: async (values, formigBag) => {
-    const { props } = formigBag;
-    const { dob, ...restparams } = values;
+  handleSubmit: async (values, formikBag) => {
+    const { props } = formikBag;
+    const { dob, ...restParams } = values;
     const { updateProfile } = props;
     await updateProfile({
       dob: moment(dob).toISOString(),
       updatedTime: moment().toISOString(),
-      ...restparams,
+      ...restParams,
     });
     props.history.goBack();
   },

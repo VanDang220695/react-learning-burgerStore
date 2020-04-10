@@ -6,20 +6,28 @@
   padding: 10px;
   box-sizing: border-box;
 }
-.txt__switchSign {
+.Txt__SwitchSign {
   margin-top: 8px;
   text-align: right;
   text-decoration: underline;
   color: blue;
   cursor: pointer;
 }
-.title__form_auth {
+.Title__Form_Auth {
   text-transform: uppercase;
   color: blue;
   text-align: center;
   font-size: 26px;
   padding: 0;
   margin: 0;
+}
+.Error__Message {
+  text-align: center;
+  text-transform: capitalize;
+  color: red;
+}
+.Icon-Prefix__Color {
+  color: blue;
 }
 @media (min-width: 600px) {
   .Auth {

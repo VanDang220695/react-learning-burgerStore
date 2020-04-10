@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Button } from 'antd';
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+
+import { FormInput } from '../../components/FormItem';
 
 import Spinner from '../../components/UI/Spinner';
-import FormSignin from '../../components/FormSignin';
-import FormSignup from '../../components/FormSignup';
-
-import * as actions from '../../store/actions';
 
 import classes from './styles.module.css';
+import enhanceAuth from './enhanceAuth';
 
 const Auth = (props) => {
-  const [isSignup, setIsSignup] = useState(false);
+  const { isSignupSuccess, buildingBurger, authRedirectPath, values } = props;
+  const { isSignup } = values;
 
-  const { isSignupSuccess, buildingBurger, authRedirectPath, onSetRedirectPath, onAuth } = props;
+  const { switchAuthModeHandler, onSetRedirectPath, changeToLoginForm } = props;
+
   useEffect(() => {
     if (!buildingBurger && authRedirectPath !== '/') {
       onSetRedirectPath();
@@ -23,35 +24,14 @@ const Auth = (props) => {
 
   useEffect(() => {
     if (isSignupSuccess) {
-      setIsSignup(false);
+      changeToLoginForm();
     }
-  }, [isSignupSuccess]);
+  }, [isSignupSuccess, changeToLoginForm]);
 
-  let form = <FormSignin />;
-  if (isSignup) {
-    form = <FormSignup />;
-  }
-
-  const submitHandler = (formValue) => {
-    const { email, password } = formValue;
-    onAuth(email, password, isSignup);
-    if (isSignupSuccess) {
-      form = <FormSignin />;
-    }
-  };
-
-  const switchAuthModeHandler = () => {
-    setIsSignup((prevState) => !prevState);
-  };
-
-  let errorMesssage = null;
+  let errorMessage = null;
 
   if (props.error) {
-    errorMesssage = (
-      <p style={{ textAlign: 'center', textTransform: 'capitalize', color: 'red' }}>
-        {props.error.message}
-      </p>
-    );
+    errorMessage = <p className={classes.Error__Message}>{props.error.message}</p>;
   }
 
   let authRedirect = null;
@@ -63,34 +43,47 @@ const Auth = (props) => {
     <div className={classes.Auth}>
       {authRedirect}
       <Spinner spinning={props.loading}>
-        <p className={classes.title__form_auth}>{!isSignup ? 'Login' : 'Register'}</p>
-        {errorMesssage}
-        <Form initialValues={{ remember: true }} name='authentication' onFinish={submitHandler}>
-          {form}
-          <Button type='primary' block htmlType='submit' style={{ marginTop: '16px' }}>
+        <p className={classes.Title__Form_Auth}>{!isSignup ? 'Login' : 'Register'}</p>
+        {errorMessage}
+        <Form id='formAuth' onFinish={props.handleSubmit}>
+          <FormInput
+            prefix={
+              <UserOutlined className={`site-form-item-icon ${classes[`Icon-Prefix__Color`]}`} />
+            }
+            placeholder='Your email'
+            name='email'
+          />
+          <FormInput
+            prefix={
+              <LockOutlined className={`site-form-item-icon ${classes[`Icon-Prefix__Color`]}`} />
+            }
+            name='password'
+            type='password'
+            placeholder='Your password'
+            autoComplete='true'
+          />
+          {isSignup && (
+            <FormInput
+              prefix={
+                <LockOutlined className={`site-form-item-icon ${classes[`Icon-Prefix__Color`]}`} />
+              }
+              name='confirmationPassword'
+              type='password'
+              placeholder='Confirm your password'
+              autoComplete='true'
+            />
+          )}
+
+          <Button type='primary' block htmlType='submit'>
             SUBMIT
           </Button>
         </Form>
-        <p onClick={switchAuthModeHandler} className={classes.txt__switchSign}>
-          Switch to {isSignup ? 'signin' : 'signup'}
+        <p onClick={switchAuthModeHandler} className={classes.Txt__SwitchSign}>
+          Switch to {isSignup ? 'login' : 'register'}
         </p>
       </Spinner>
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  loading: state.auth.loading,
-  error: state.auth.error,
-  isAuthenticated: !!state.auth.token,
-  buildingBurger: state.burgerBuilder.building,
-  authRedirectPath: state.auth.authRedirectPath,
-  isSignupSuccess: state.auth.isSingupSuccess,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
-  onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default enhanceAuth(Auth);
