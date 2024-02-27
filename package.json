@@ -1,6 +1,6 @@
 {
 	"name": "super-small-tiny-npm-deploy",
-	"version": "2.0.1",
+	"version": "3.0.0",
 	"dependencies": {
 		"@ant-design/icons": "^4.0.5",
 		"@testing-library/jest-dom": "^4.2.4",
