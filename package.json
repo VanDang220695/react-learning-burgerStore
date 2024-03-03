@@ -1,6 +1,6 @@
 {
 	"name": "super-small-tiny-npm-deploy",
-	"version": "3.1.0",
+	"version": "3.2.0",
 	"dependencies": {
 		"@ant-design/icons": "^4.0.5",
 		"@testing-library/jest-dom": "^4.2.4",
@@ -10,6 +10,7 @@
 		"axios": "^0.19.2",
 		"formik": "^2.1.4",
 		"moment": "^2.24.0",
+		"practice-alg-ts": "^4.0.0",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-redux": "^7.2.0",
