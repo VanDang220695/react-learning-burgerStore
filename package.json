@@ -7,7 +7,7 @@
 		"@testing-library/react": "^9.3.2",
 		"@testing-library/user-event": "^7.1.2",
 		"antd": "^4.1.0",
-		"axios": "^0.19.2",
+		"axios": "^1.6.7",
 		"formik": "^2.1.4",
 		"moment": "^2.24.0",
 		"practice-alg-ts": "^4.0.0",
