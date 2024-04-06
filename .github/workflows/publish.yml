@@ -22,7 +22,7 @@ jobs:
       - run: npm ci
 
       - name: publish version
-        run: npm version $(semver $npm_package_version -i major)
+        run: npm version patch
       - name: publish
         run: npm publish --access publish
         env:
