@@ -5,24 +5,19 @@ on:
       - master
 
 jobs:
-  createPullRequest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Bump version
-        run: npm version patch
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v1
-        with:
-          token: ${{ secrets.BURGER_GITHUB_TOKEN }}
-          commit-message: Bump version
-          title: Bump version
   release:
     name: publish
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4.1.1
+        with:
+          token: ${{ secrets.BURGER_GITHUB_TOKEN }}
+
+      - run: git config --global user.name 'Dang Nguyen'
+      - run: git config --global user.email 'dangtpvt220695@gmail.com'
+      - run: npm version patch -m "[RELEASE] %s"
+      - run: git push
       - name: node
         uses: actions/setup-node@v4.0.2
         with:
