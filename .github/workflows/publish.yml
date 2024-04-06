@@ -14,10 +14,10 @@ jobs:
         with:
           token: ${{ secrets.BURGER_GITHUB_TOKEN }}
 
-      - run: git config --global user.name 'Dang Nguyen'
-      - run: git config --global user.email 'dangtpvt220695@gmail.com'
-      - run: npm version patch -m "[RELEASE] %s"
-      - run: git push
+      #   - run: git config --global user.name 'Dang Nguyen'
+      #   - run: git config --global user.email 'dangtpvt220695@gmail.com'
+      #   - run: npm version patch -m "[RELEASE] %s"
+      #   - run: git push
       - name: node
         uses: actions/setup-node@v4.0.2
         with:
